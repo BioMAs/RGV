@@ -345,7 +345,10 @@ def d_getter(request):
         
         allsample = df["sample_ID"]
         for sample in allsample :
-            sample_number = sample_number + len(sample.split('|'))
+            try :
+                sample_number = sample_number + len(sample.split('|'))
+            except:
+                continue
         lspecies = ['Mus musculus', 'Homo sapiens', 'Rattus norvegicus', 'Gallus gallus', 'Macaca mulatta', 'Canis lupus familiaris','Danio rerio', 'Bos taurus', 'Sus scrofa']
         species_number = len(lspecies)
 
