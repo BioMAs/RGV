@@ -63,6 +63,7 @@ def main(global_config, **settings):
     config.add_route('d_getter', '/data_frame')
     config.add_route('file_dataset','/dataset_download/{dir}/{file}')
     config.add_route('genelevel', '/genelevel')
+    config.add_route('densitylevel', '/densitylevel')
     config.add_route('home', '/')
     config.add_route('hmtData', '/hmtData')
     config.add_route('login', '/user/login')

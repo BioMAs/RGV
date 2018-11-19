@@ -72,6 +72,10 @@ config(['$routeProvider','$logProvider',
             templateUrl: 'views/browser_scRNAseq.html',
             controller: 'browser_scRNAseqCtrl'
         });
+        $routeProvider.when('/browser_density', {
+            templateUrl: 'views/density_plot.html',
+            controller: 'browser_densityCtrl'
+        });
         $routeProvider.when('/heatmap', {
             templateUrl: 'views/heatmap.html',
             controller: 'heatmapCtrl'
@@ -929,6 +933,302 @@ function ($scope,$rootScope,$http,$filter,Auth, Dataset,uiGridConstants,$resourc
 
     
 });
+
+
+////////////////////// Density Browser////////////////////////////////////////
+angular.module('rgv').controller('browser_densityCtrl',
+function ($scope,$rootScope,$http,$filter, Dataset, Auth, uiGridConstants, $q, $templateCache) {
+    
+    var user = Auth.getUser();
+
+        //Get Gene level information
+    $scope.dispalaySpe = function(dict, value){
+        for(var key in dict) {
+            if(dict[key] === value) {
+                return key
+            }
+        }
+    }
+    
+    //Update grid2 en fonction de la selection de la grid1
+    $scope.updateSelection = function() {
+        console.log("Update");
+        $scope.gridApi.grid.refresh();
+    };
+
+    //Display block
+    $scope.displayStep = function(id){
+        $scope.selected_gene =[];
+
+        document.getElementById(id).style.visibility = "visible";
+    };
+
+    $scope.replaceString = function(stingToReplace){
+        if (stingToReplace == null){
+            return " ";
+        }
+        if (stingToReplace.indexOf('|') > -1){
+            var finalString = stingToReplace.split('|').join(', ');
+            return finalString;
+        } else {
+            return stingToReplace;
+        }
+        
+        
+    }
+
+    $scope.replaceStringtoList = function(stingToReplace){
+        if (stingToReplace == null){
+            return [""];
+        }
+        if (stingToReplace.indexOf('|') > -1){
+            var finalString = stingToReplace.split('|');
+            return finalString;
+        } else {
+            return [stingToReplace];
+        }
+    }
+
+
+    $scope.filterValue = null;
+    $scope.users;
+    $scope.chosen = [];
+    $scope.selected_gene = [];
+    $scope.allgenes = {};
+
+
+    //liste obj selectionnés
+    
+    //Species list & tax_id
+    $scope.speciesValue = null;
+    Dataset.read_file({"name":"genomes"}).$promise.then(function(dataset){
+        $scope.species = []
+        console.log(dataset);
+        for (var i=0;i<dataset.data.line.length;i++){
+            var field = dataset.data.line[i].split('\t');
+            $scope.species.push({'name':field[0],'tax_id':field[2].replace(/[\n]/gi, "" )});
+        }
+        console.log($scope.species);
+    });
+
+    $scope.getTaxID = function(Species,speciesDict){
+        for(var i=0;i<speciesDict.length;i++){
+            if(speciesDict[i].name == Species){
+                $scope.speciesValue = speciesDict[i].tax_id;
+                return speciesDict[i].tax_id
+            }
+        }
+    }
+    
+    if (user == null){
+
+    
+        var startPromise = Dataset.data_frame({"name":"metadata.csv","user":"none"}).$promise.then(function(response){
+            return $q.when(response)
+        })
+        startPromise.then(function(value){
+            $scope.data_all = value.data;
+            $scope.ome = value.ome;
+            $scope.allspe = value.species;
+            $scope.techno = value.technology;
+            $scope.sex = value.sex;
+            $scope.experimentaldesign = value.experimental_design;
+            $scope.biotop = value.biological_topics;
+            $scope.tissues = value.tissue_or_cell;
+            $scope.stage = value.developmental_stage;
+            $scope.age = value.age;
+            $scope.antibody = value.antibody;
+            $scope.mutant = value.mutant;
+            $scope.cellsorted = value.cell_sorted;
+            $scope.keywords = value.keywords;
+            //copy the references (you could clone ie angular.copy but then have to go through a dirty checking for the matches)
+                $scope.displayedCollection = [].concat($scope.data_all);
+
+        
+        });
+    }
+
+    if (user != null){
+        var startPromise = Dataset.data_frame({"name":"metadata.csv","user":user.id}).$promise.then(function(response){
+            return $q.when(response)
+        })
+        startPromise.then(function(value){
+            $scope.data_all = value.data;
+            $scope.ome = value.ome;
+            $scope.allspe = value.species;
+            $scope.techno = value.technology;
+            $scope.sex = value.sex;
+            $scope.experimentaldesign = value.experimental_design;
+            $scope.biotop = value.biological_topics;
+            $scope.tissues = value.tissue_or_cell;
+            $scope.stage = value.developmental_stage;
+            $scope.age = value.age;
+            $scope.antibody = value.antibody;
+            $scope.mutant = value.mutant;
+            $scope.cellsorted = value.cell_sorted;
+            $scope.keywords = value.keywords;
+
+
+            //copy the references (you could clone ie angular.copy but then have to go through a dirty checking for the matches)
+                $scope.displayedCollection = [].concat($scope.data_all);
+
+        
+        });
+    }      
+
+    $scope.multiFile = null;
+
+    $scope.hasSelected = function(){
+        var selectedRows = $filter("filter")($scope.data_all, {
+            isSelected: true
+            }, true);
+        $scope.chosen = selectedRows;
+        console.log($scope.chosen);
+        $scope.multiFile = selectedRows;
+        return true;
+    };
+
+    $scope.selectPath = function(study, newpath){
+        var selectedRows = $filter("filter")($scope.data_all, {
+            isSelected: true
+            }, true);
+        $scope.models = {};
+        $scope.chosen = selectedRows;
+        var index = $scope.chosen.indexOf(study);
+        if ( index != -1){
+            var stud = $scope.chosen[index];
+            stud.path = newpath;
+
+            var names = newpath.split('/');
+            names = names[names.length - 1];
+            names = names.replace("data_genelevel_","");
+            names = names.replace(".txt","");
+            names = names.replace("_"," ");
+            
+            if(names == "data genelevel"){
+                names = 'Default dataset'
+            }
+            names = names.replace("_"," ");
+
+
+            stud["pathName"] = names;
+            $scope.chosen[index] = stud;
+        };
+
+    };
+
+    $scope.getName = function(stingToReplace){
+        var names = stingToReplace.split('/');
+        names = names[names.length - 1];
+        names = names.replace("data_genelevel_","");
+        names = names.replace(".txt","");
+        names = names.replace("_"," ");
+        
+        if(names == "data genelevel"){
+            names = 'Default dataset'
+        }
+        names = names.replace("_"," ");
+        return names
+    }
+
+
+    $scope.selected_class ='';
+    $scope.models = {};
+    //Fonction visualisation gene Level
+    $scope.msg = []
+    $scope.showData = function(selected_lst,select_class,genes,model){
+        var selectedRows = $filter("filter")($scope.data_all, {
+            isSelected: true
+            }, true);
+
+        $scope.chosen = selectedRows;
+        selected_lst = $scope.chosen;
+        $scope.msg = [];
+        var directory_list = [];
+        var genes_list = {};
+        var name = '';
+        for (var i=0;i<selected_lst.length;i++){
+            if (selected_lst[i].path !=null){
+                directory_list.push(selected_lst[i].path);
+                name = selected_lst[i].Author+'_'+selected_lst[i].Year
+            }else{
+                $scope.msg.push(" No data available for study: "+selected_lst[i].Study+';');
+            }
+        }
+        if(directory_list.length > 0){
+            //test
+            Dataset.densitylevel({},{'directory':directory_list,'genes':genes,'class':select_class,'name':name,'model':model}).$promise.then(function(response){
+
+                $scope.time = response.time;
+                $scope.response = response;
+                console.log(response);
+
+
+            });
+        }else{
+            $scope.msgwrn ="No data available. Please select other studies or contact RGV support.";
+            return $scope.msgwrn;
+        }
+        
+    }
+    
+    $scope.get_item = function(item, model,label){
+        $scope.higlight_gene = item;
+     };
+
+    $scope.select_genes = function(stud,selectedgene){
+        $scope.msg = []
+        var name = stud.path;
+        selectedgene['stud_name'] = name;
+
+        if ($scope.allgenes.hasOwnProperty(name)) {
+            if ($scope.allgenes[name] != undefined){
+                var index = $scope.allgenes[name].indexOf(selectedgene);
+            if ( index != -1){
+                $scope.allgenes[name].splice(index,1);                   
+            } else{
+                    $scope.allgenes[name].push(selectedgene);
+                    selectedgene = undefined;     
+                }
+            }
+        } else {
+            $scope.allgenes[name] = [];
+            $scope.allgenes[name].push(selectedgene)
+        }
+    }
+
+    $scope.remove_genes = function(gene,stud){
+        var index = $scope.allgenes[stud].indexOf(gene);
+        if ( index != -1){
+            $scope.allgenes[stud].splice(index,1);                              
+        };
+    }
+
+    $scope.remove_study = function(study){
+        var index = $scope.chosen.indexOf(study);
+        console.log(study)
+        if ( index != -1){
+            $scope.chosen.splice(index,1);
+        };
+    }
+    
+    $scope.get_genes = function(val,database,stud,speciesDict) {
+        var species_val = '';
+        for(var i=0;i<speciesDict.length;i++){
+            if(speciesDict[i].name == stud.species){
+                species_val = speciesDict[i].tax_id;
+            }
+        }
+        console.log(stud.species)
+        return Dataset.autocomplete({},{'database':database,'search':val,'tax_id':species_val}).$promise.then(function(data){
+            return data.map(function(item){
+                    return item;
+            });
+        });
+    };
+      
+});
+
 
 ////////////////////// HEATMAP ////////////////////////////////////////
 ////////////////////// HEATMAP ////////////////////////////////////////

@@ -68,6 +68,12 @@
                 isArray: false,
                 cache: false
             },
+            densitylevel: {
+                url: '/densitylevel',
+                method: 'POST',
+                isArray: false,
+                cache: false
+            },
             scData: {
                 url: '/scData',
                 method: 'POST',

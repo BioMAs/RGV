@@ -681,7 +681,271 @@ def genelevel(request):
 
     interval = time.time() - start_time  
     result['time'] = interval
-    return result                
+    return result
+
+@view_config(route_name='densitylevel', renderer='json', request_method='POST')
+def densitylevel(request):
+    def getValue(file_in,selectedvalues):
+        dIndex =  cPickle.load(open(file_in+".pickle"))
+        fList = open(file_in,"r")
+        result = {}
+        for val in selectedvalues :
+            if str(val) in dIndex:
+                iPosition = dIndex[str(val)]
+                fList.seek(iPosition)
+                result[str(val)] = fList.readline().rstrip().split('\t')[1:]
+            else:
+                result[str(val)] = []
+        return result
+    
+    def getClass(file_in):
+        dIndex =  cPickle.load(open(file_in+".pickle"))
+        result = []
+        for index in dIndex :
+            if "Class" in index :
+                result.append(index)
+        return result
+    
+    def getGene(file_in):
+        dIndex =  cPickle.load(open(file_in+".pickle"))
+        result = []
+        allIndex = list(dIndex.keys())
+        result.append(allIndex[4])
+        return result
+
+    def random_color(NbColors):
+        pi = 3.14159265359
+        pid2 = pi/2
+        angle = 0
+        step = pi/(NbColors)
+        ListOfColors = []
+        for i in range(0,NbColors):
+            R = round((math.cos(angle)+1)/2 * 200)
+            G = round((math.cos(angle-pid2)+1)/2 * 200)
+            B = round((math.cos(angle-pi)+1)/2 * 200)
+            angle = angle + step
+            ListOfColors.append('rgb('+str(R)+','+str(G)+','+str(B)+')')
+        return ListOfColors
+
+    form = json.loads(request.body, encoding=request.charset)
+    directories = form['directory']
+
+    all_genes = form['genes']
+    if all_genes == '':
+        all_genes  = {}
+        for study in directories :
+            all_genes[study] =  getGene(os.path.join(request.registry.studies_path,study))
+
+    if "model" in form :
+        model = form['model']
+    else :
+        model = {}
+
+    ensemblgenes = []
+    selected_genes = []
+    selected_class = ""
+    result = {'time':''}
+    #print directories
+    start_time = time.time()  
+    div = 0
+    for study in directories :
+        result[study] = {}
+        
+        if study in all_genes :
+            for gene in all_genes[study]:
+                if gene['stud_name'] == study:
+                    result[study][gene['Symbol']] = {}
+                    result[study][gene['Symbol']]['charts'] = []
+                    chart = {}
+                    result[study][gene['Symbol']]['class'] = getClass(os.path.join(request.registry.studies_path,study))
+                    selected_genes.append(gene['GeneID'])
+                    ensemblgenes.append(gene['EnsemblID'])
+                    selected_class = result[study][gene['Symbol']]['class'][0]
+                    if study in model :
+                        if gene['Symbol'] in model[study] :
+                            selected_class = model[study][gene['Symbol']]
+                    else : 
+                        selected_class = result[study][gene['Symbol']]['class'][0]
+                    groups = getValue(os.path.join(request.registry.studies_path,study),[selected_class])
+                    groups = np.array(groups[selected_class])
+                    _, idx = np.unique(groups, return_index=True)
+                    uniq_groups = groups[np.sort(idx)[::-1]]
+                    
+                    samples = getValue(os.path.join(request.registry.studies_path,study),['Sample'])
+                    samples = np.array(samples['Sample'])
+
+                    genes = getValue(os.path.join(request.registry.studies_path,study),selected_genes)
+                    ensembl_genes = getValue(os.path.join(request.registry.studies_path,study),ensemblgenes)
+
+                    x = np.array(getValue(os.path.join(request.registry.studies_path,study),['X'])['X'])
+                    y = np.array(getValue(os.path.join(request.registry.studies_path,study),['Y'])['Y'])
+
+                    #ADD Density PLOT FOR GENE
+                    gene_name = gene['Symbol']
+                    chart['config']={'displaylogo':False,'modeBarButtonsToRemove':['toImage','zoom2d','pan2d','lasso2d','resetScale2d']}
+                    chart['data']=[]
+                    chart['div']=str(div)
+                    div += 1
+                    chart['description'] = ""
+                    chart['dir'] = study
+                    chart['selected'] = selected_class
+                    chart['name'] = gene_name
+                    chart['title'] = "violin"
+                    chart['selected'] = selected_class
+                    chart['layout'] = {
+                        'autosize' : False,
+                        'height': 800,
+                        'width':1180,
+                        'margin':{
+                            't':50,
+                            },
+                    }
+                    chart['gene'] = gene_name
+                    chart['msg'] = ""
+                    chart['study'] = study
+
+                    #EntrezGenes
+                    val_gene = np.array(genes[str(gene['GeneID'])])
+                    if len(val_gene) != 0 :
+                        max_val =  np.max(val_gene.astype(np.float))
+                        min_val =  np.min(val_gene.astype(np.float))
+
+                    #Ensembl IDs
+                    val_gene_ensembl = np.array(ensembl_genes[str(gene['EnsemblID'])])
+                    if len(val_gene_ensembl) != 0 :
+                        max_val =  np.max(val_gene_ensembl.astype(np.float))
+                        min_val =  np.min(val_gene_ensembl.astype(np.float))
+
+
+                   
+
+                    #data_chart3 = {}
+                    #data_chart3['type'] = 'scatter'
+                    #data_chart3['mode'] = 'markers'
+                    #data_chart3['x'] = []
+                    #data_chart3['y'] = []
+
+                    shape = []
+
+                    data_chart1 = {}
+                    data_chart1['type'] = 'histogram2dcontour'
+                    data_chart1['ncontours'] = 20
+                    data_chart1['x'] = []
+                    data_chart1['y'] = []
+                    data_chart1['z'] = []
+                    data_chart1['histfunc'] = 'sum'
+                    data_chart1['colorscale'] = [[0,'rgba(255,255,255,0)'],[1,'rgba(255,0,0,1)']]
+                    data_chart1['contours'] = {'showlines':False}
+                    data_chart1['histnorm'] = 'density'
+                    data_chart1['reversescale'] = False
+                    data_chart1['showscale'] = True
+
+
+                    ListOfColors = random_color(len(uniq_groups))
+                    color = 0
+
+                    for cond in uniq_groups :
+                        cond_color = ListOfColors[color]
+                        color += 1
+                        if len(val_gene) != 0 :
+                            val_x= x[np.where(groups == cond)[0]]
+                            val_y= y[np.where(groups == cond)[0]]
+                            val_cond = val_gene[np.where(groups == cond)[0]]
+
+                            data_chart1['x'].extend(val_x)
+                            data_chart1['y'].extend(val_y)
+                            data_chart1['z'].extend(val_cond)
+                            
+                            data_chart = {}
+                            data_chart['type'] = 'histogram2dcontour'
+                            data_chart['ncontours'] = 20
+                            data_chart['name'] = cond
+                            data_chart['x'] = []
+                            data_chart['x'].extend(val_x)
+                            data_chart['y'] = []
+                            data_chart['y'].extend(val_y)
+
+                            data_chart['legendgroup'] = cond
+                            data_chart['hoverinfo'] = 'none'
+                            
+
+                            data_chart['line'] = {'color':cond_color}
+                            data_chart['contours'] = {'coloring':'none'}
+                            data_chart['reversescale'] = False
+                            chart['data'].append(data_chart)
+
+                            #data_chart3['x'].extend(val_x)
+                            #data_chart3['y'].extend(val_y)
+                            
+                           
+                        elif len(val_gene_ensembl) != 0 :
+                            val_x= x[np.where(groups == cond)[0]]
+                            val_y= y[np.where(groups == cond)[0]]
+                            val_cond = val_gene_ensembl[np.where(groups == cond)[0]]
+
+                            data_chart1['x'].extend(val_x)
+                            data_chart1['y'].extend(val_y)
+                            data_chart1['z'].extend(val_cond)
+
+
+                            data_chart = {}
+                            data_chart['type'] = 'histogram2dcontour'
+                            data_chart['ncontours'] = 20
+                            data_chart['name'] = cond
+                            data_chart['x'] = []
+                            data_chart['x'].extend(val_x)
+                            data_chart['y'] = []
+                            data_chart['y'].extend(val_y)
+                            data_chart['line'] = {'color':cond_color}
+                            data_chart['contours'] = {'coloring':'none'}
+                            data_chart['reversescale'] = False
+
+                            chart['data'].append(data_chart)
+
+                        else :
+                            chart['msg'] = "No data available for %s gene" % (gene_name)
+                        
+                        chart['data'].insert(0,data_chart1)
+                    
+                    result[study][gene['Symbol']]['charts'].append(chart)
+
+                else :
+                    result[study][gene['Symbol']] = {}
+                    result[study][gene['Symbol']]['charts'] = []
+                    chart = {}
+                    chart['config']={'displaylogo':False,'modeBarButtonsToRemove':['toImage','zoom2d','pan2d','lasso2d','resetScale2d']}
+                    chart['data']=[]
+                    chart['dir'] = study
+                    chart['description'] = ""
+                    chart['name'] = "No selected gene"
+                    chart['title'] = ""
+                    chart['selected'] = ''
+                    chart['layout'] = {'height': 600,'showlegend': False,"title":'','margin':{'l':300,},'yaxis':{'tickfont':10},'hovermode': 'closest'}
+                    chart['gene'] = ""
+                    chart['msg'] = "Please select at least one gene"
+                    chart['study'] = study
+                    result[study][gene['Symbol']]['charts'].append(chart)
+        else :
+            result[study]["No selected gene"] = {}
+            result[study]["No selected gene"]['charts'] = []
+            result[study]["No selected gene"]['class'] = getClass(os.path.join(request.registry.studies_path,study))
+            chart = {}
+            chart['config']={'displaylogo':False,'modeBarButtonsToRemove':['toImage','zoom2d','pan2d','lasso2d','resetScale2d']}
+            chart['data']=[]
+            chart['dir'] = study
+            chart['description'] = ""
+            chart['name'] = "No selected gene"
+            chart['title'] = ""
+            chart['selected'] = ''
+            chart['layout'] = {'height': 600,'showlegend': False,"title":'','margin':{'l':300,},'yaxis':{'tickfont':10},'hovermode': 'closest'}
+            chart['gene'] = ""
+            chart['msg'] = "Please select at least one gene"
+            chart['study'] = study
+            result[study]["No selected gene"]['charts'].append(chart)
+
+    interval = time.time() - start_time  
+    result['time'] = interval
+    return result
 
 @view_config(route_name='scDataGenes', renderer='json', request_method='POST')
 def scDataGenes(request):
@@ -790,7 +1054,7 @@ def scDataGenes(request):
                         val_y= y[np.where(groups == cond)[0]]
                         text = samples[np.where(groups == cond)[0]]
                         data_chart = {}
-                        data_chart['type'] = 'scatter'
+                        data_chart['type'] = 'scattergl'
                         data_chart['mode']= 'markers'
                         data_chart['text'] = []
                         data_chart['text'].extend(text)
@@ -809,7 +1073,7 @@ def scDataGenes(request):
                         val_y= y[np.where(groups == cond)[0]]
                         text = samples[np.where(groups == cond)[0]]
                         data_chart = {}
-                        data_chart['type'] = 'scatter'
+                        data_chart['type'] = 'scattergl'
                         data_chart['mode']= 'markers'
                         data_chart['text'] = []
                         data_chart['text'].extend(text)
@@ -851,32 +1115,29 @@ def scDataGenes(request):
                     median = np.median(val.astype(np.float))
                     data_chart = {}
                     data_chart['x'] = []
+                    print cond
+                    
                     q = np.percentile(val.astype(np.float), 95) #95eme percentile
-                    q3 = np.percentile(val.astype(np.float), 75) #Q3 
-                    for x in val :
-                        if float(x) <= q :
-                            data_chart['x'].append(x)
+                    q3 = np.percentile(val.astype(np.float), 75) #Q3
+                    print median,q,q3
+                    print set(val) 
+                    #for x in val :
+                        #data_chart['x'].append(x)
 
                     
-                    #data_chart['x'].extend(val)
+                    data_chart['x'].extend(val)
                     data_chart['name'] = cond
                     data_chart['hoverinfo'] = "all"
-                    ratio_type = len(samples)/len(uniq_groups)
-                    print ratio_type
-                    if len(data_chart['x']) > 10 and q3 > 0.1:
-                        data_chart['type'] = 'violin'
-                        data_chart['points'] = False
-                        data_chart['spanmode'] = "hard"
-                        data_chart['orientation'] = 'h'
-                        data_chart['box'] = {'visible': True}
-                        data_chart['boxpoints'] = False
-                        data_chart['q3_value'] = q3
-                    else :
-                        data_chart['type'] = 'scatter'
-                        data_chart['mode'] = 'markers'
-                        data_chart['y'] = [cond] * len(data_chart['x'])
-                        data_chart['boxpoints'] = "all"
-                        data_chart['q3_value'] = q3
+                    #ratio_type = len(samples)/len(uniq_groups)
+                    #print ratio_type
+                    data_chart['type'] = 'box'
+                    #data_chart['points'] = False
+                    #data_chart['spanmode'] = "hard"
+                    #data_chart['orientation'] = 'h'
+                    #data_chart['box'] = {'visible': True}
+                    #data_chart['boxpoints'] = False
+                    #data_chart['q3_value'] = q3
+
                     chart['violin']['data'].append(data_chart)
                 result['charts'].append(chart)
         
@@ -1024,7 +1285,7 @@ def scData(request):
             data_chart['text'] = []
             data_chart['text'].extend(text)
             data_chart['hoverinfo'] = "all"
-            data_chart['type'] = 'scatter'
+            data_chart['type'] = 'scattergl'
             data_chart['mode']= 'markers'
             chart['data'].append(data_chart)
         result['charts'].append(chart)
