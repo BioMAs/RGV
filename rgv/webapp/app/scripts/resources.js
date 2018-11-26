@@ -74,6 +74,12 @@
                 isArray: false,
                 cache: false
             },
+            densityGenes: {
+                url: '/densityGenes',
+                method: 'POST',
+                isArray: false,
+                cache: false
+            },
             scData: {
                 url: '/scData',
                 method: 'POST',

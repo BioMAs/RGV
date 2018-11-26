@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
 <link href="styles/justified-nav.css" rel="stylesheet">
 <link href="styles/home_cards.css" rel="stylesheet">
 <link href="styles/progress_circle.css" rel="stylesheet">
@@ -21,45 +21,57 @@
 			<img class="img-fluid rounded" src="images/RGVLogo_home.png" alt="" width="100%">
 			<p>The ReproGenomics Viewer is a cross-species genomic resource for the reproductive science community. It aims to centralize and harmonize ultra-high-throughput sequencing data accumulated in the field of reproductive biology and to assist scientists in the exploration of these datasets.</p>
 		</div><!--
-		--><div class="col-lg-6 vcenter" style="height: 336px;">
+		--><div class="col-lg-6 vcenter" style="height: 436px;">
 				<div class="blog-card" style="height: 100px;">
-						<div class="photo photo1"></div>
-						<ul class="details">
-							<li ><a href="#/browser_genome">Get started</a></li>
+					<div class="photo photo1"></div>
+					<ul class="details">
+						<li ><a href="#/browser_genome">Get started</a></li>
+						<li><a href="#/tutorial">Read More</a></li>
+					</ul>
+					<div class="description">
+						<h1 style="font-size: 24px;">Genome browser</h1>
+						<h2>Fluid and intuitive genomic navigation among chromosomes </h2>
+						<p class="summary"></p>
+						
+					</div>
+				</div>
+				<div class="blog-card" style="height: 100px;">
+					<div class="photo photo2"></div>
+					<ul class="details">
+							<li ><a href="#/browser_genelevel">Get started</a></li>
 							<li><a href="#/tutorial">Read More</a></li>
-						</ul>
-						<div class="description">
-							<h1 style="font-size: 24px;">Genome browser</h1>
-							<h2>Fluid and intuitive genomic navigation among chromosomes </h2>
-							<p class="summary"></p>
-							
-						</div>
+					</ul>
+					<div class="description">
+						<h1 style="font-size: 24px;">Violin plot</h1>
+						<h2>Display distribution of an expression data set</h2>
+						<p class="summary"></p>
 					</div>
-					<div class="blog-card" style="height: 100px;">
-						<div class="photo photo2"></div>
-						<ul class="details">
-								<li ><a href="#/browser_genelevel">Get started</a></li>
-								<li><a href="#/tutorial">Read More</a></li>
-						</ul>
-						<div class="description">
-							<h1 style="font-size: 24px;">Violin plot</h1>
-							<h2>Display distribution of an expression data set</h2>
-							<p class="summary"></p>
-						</div>
+				</div>
+				<div class="blog-card" style="height: 100px;">
+					<div class="photo photo3"></div>
+					<ul class="details">
+							<li ><a href="#/browser_scRNAseq">Get started</a></li>
+							<li><a href="#/tutorial">Read More</a></li>
+					</ul>
+					<div class="description">
+						<h1 style="font-size: 24px;">Scatter plot</h1>
+						<h2>Explore complex datasets </h2>
+						<p class="summary"></p>
 					</div>
-					<div class="blog-card" style="height: 100px;">
-							<div class="photo photo3"></div>
-							<ul class="details">
-									<li ><a href="#/browser_scRNAseq">Get started</a></li>
-									<li><a href="#/tutorial">Read More</a></li>
-							</ul>
-							<div class="description">
-								<h1 style="font-size: 24px;">Scatter plot</h1>
-								<h2>Explore complex datasets </h2>
-								<p class="summary"></p>
-							</div>
-						</div>
-		</div>
+				</div>
+				<div class="blog-card" style="height: 100px;">
+					<div class="photo photo4"></div>
+					<ul class="details">
+							<li ><a href="#/browser_scRNAseq">Get started</a></li>
+							<li><a href="#/tutorial">Read More</a></li>
+					</ul>
+					<div class="description">
+						<h1 style="font-size: 24px;">Density plot <span class="label label-default">beta</span></h1>
+						<h2>A new way to display single cell data sets</h2>
+						<p class="summary"></p>
+					</div>
+				</div>
+			</div>
 		<!-- /.col-md-4 -->
 	</div>
 	<!-- /.row 
@@ -216,7 +228,8 @@
         <div class="panel-body fixed-panel">
           <div ng-repeat="(key,value) in newsfeed">
             <h4>{{value.title}}</h4>
-            <p>{{value.text}}</p>
+            <span ng-if="value.category == 'Study'">More information: <a href="https://www.ncbi.nlm.nih.gov/pubmed/{{value.text}}" target="blank">Pubmed</a></span>
+            <span ng-if="value.category != 'Study'">{{value.text}}</span>
             <hr>
 
           </div>

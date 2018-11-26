@@ -1,14 +1,646 @@
 {
 "news_list":[
     {
-      "title" : "Welcome to RGV 2.0",
-      "text" : "The new version of RGV is now available. Discover what’s new in RGV now.",
-      "category": "Information",
-      "date": "2017/12/12"
+      "title" : "Density plot visualization tool",
+      "text" : "A new way to explore single-cell data sets.",
+      "category": "Tool",
+      "date": "2018-Nov-26"
     },
     {
+      "title" : "Scatter plot optimization",
+      "text" : "Ready to viszualize large data sets.",
+      "category": "Tool",
+      "date": "2018-Nov-15"
+    },
+    {
+		"date": "2018-Nov-24",
+		"category": "Study",
+		"text": "15499007",
+		"title": "New study added: The ENCODE consortium et al. 2004"
+	}, {
+		"date": "2018-Nov-22",
+		"category": "Study",
+		"text": "19525931",
+		"title": "New study added: Hammoud et al. 2009"
+	}, {
+		"date": "2018-Nov-20",
+		"category": "Study",
+		"text": "20473313",
+		"title": "New study added: Brykczynska et al. 2010"
+	}, {
+		"date": "2018-Nov-19",
+		"category": "Study",
+		"text": "20885785",
+		"title": "New study added: Illingworth et al. 2010"
+	}, {
+		"date": "2018-Nov-13",
+		"category": "Study",
+		"text": "20944595",
+		"title": "New study added: Bernstein et al. 2010"
+	}, {
+		"date": "2018-Nov-08",
+		"category": "Study",
+		"text": "21460839",
+		"title": "New study added: Smagulova et al. 2011"
+	}, {
+		"date": "2018-Nov-06",
+		"category": "Study",
+		"text": "21831882",
+		"title": "New study added: Johnson et al. 2011"
+	}, {
+		"date": "2018-Nov-05",
+		"category": "Study",
+		"text": "21890647",
+		"title": "New study added: Cabili et al. 2011"
+	}, {
+		"date": "2018-Nov-04",
+		"category": "Study",
+		"text": "21925322",
+		"title": "New study added: Tan et al. 2011"
+	}, {
+		"date": "2018-Nov-02",
+		"category": "Study",
+		"text": "22012392",
+		"title": "New study added: Brawand et al. 2011"
+	}, {
+		"date": "2018-Oct-29",
+		"category": "Study",
+		"text": "22367190",
+		"title": "New study added: Khil et al. 2012"
+	}, {
+		"date": "2018-Oct-28",
+		"category": "Study",
+		"text": "22454233",
+		"title": "New study added: Derti et al. 2012"
+	}, {
+		"date": "2018-Oct-23",
+		"category": "Study",
+		"text": "22660327",
+		"title": "New study added: Brick et al. 2012"
+	}, {
+		"date": "2018-Oct-22",
+		"category": "Study",
+		"text": "22722858",
+		"title": "New study added: Macfarlan et al. 2012"
+	}, {
+		"date": "2018-Oct-21",
+		"category": "Study",
+		"text": "22763441",
+		"title": "New study added: Shen et al. 2012"
+	}, {
+		"date": "2018-Oct-19",
+		"category": "Study",
+		"text": "22842725",
+		"title": "New study added: Vourekas et al. 2012"
+	}, {
+		"date": "2018-Oct-17",
+		"category": "Study",
+		"text": "23219530",
+		"title": "New study added: Seisenberger et al. 2012"
+	}, {
+		"date": "2018-Oct-16",
+		"category": "Study",
+		"text": "23242216",
+		"title": "New study added: Gkountela et al. 2012"
+	}, {
+		"date": "2018-Oct-15",
+		"category": "Study",
+		"text": "23352811",
+		"title": "New study added: Ng et al. 2013"
+	}, {
+		"date": "2018-Oct-14",
+		"category": "Study",
+		"text": "23471003",
+		"title": "New study added: Sendler et al. 2013"
+	}, {
+		"date": "2018-Oct-13",
+		"category": "Study",
+		"text": "23486062",
+		"title": "New study added: Yokobayashi et al. 2013"
+	}, {
+		"date": "2018-Oct-12",
+		"category": "Study",
+		"text": "23523368",
+		"title": "New study added: Li et al. 2013"
+	}, {
+		"date": "2018-Oct-07",
+		"category": "Study",
+		"text": "23592795",
+		"title": "New study added: Zhang et al. 2013"
+	}, {
+		"date": "2018-Oct-06",
+		"category": "Study",
+		"text": "23660593",
+		"title": "New study added: Velthut-Meikas et al. 2013"
+	}, {
+		"date": "2018-Oct-05",
+		"category": "Study",
+		"text": "23663777",
+		"title": "New study added: Jiang et al. 2013"
+	}, {
+		"date": "2018-Oct-03",
+		"category": "Study",
+		"text": "23759713",
+		"title": "New study added: Gan et al. 2013"
+	}, {
+		"date": "2018-Oct-01",
+		"category": "Study",
+		"text": "23770822",
+		"title": "New study added: Erkek et al. 2013"
+	}, {
+		"date": "2018-Sep-28",
+		"category": "Study",
+		"text": "23791531",
+		"title": "New study added: Soumillon et al. 2013"
+	}, {
+		"date": "2018-Sep-23",
+		"category": "Study",
+		"text": "23869956",
+		"title": "New study added: Mao et al. 2013"
+	}, {
+		"date": "2018-Sep-22",
+		"category": "Study",
+		"text": "23870400",
+		"title": "New study added: Smagulova et al. 2013"
+	}, {
+		"date": "2018-Sep-21",
+		"category": "Study",
+		"text": "23892778",
+		"title": "New study added: Xue et al. 2013"
+	}, {
+		"date": "2018-Sep-19",
+		"category": "Study",
+		"text": "23934149",
+		"title": "New study added: Yan et al. 2013"
+	}, {
+		"date": "2018-Sep-18",
+		"category": "Study",
+		"text": "24043772",
+		"title": "New study added: Lesch et al. 2013"
+	}, {
+		"date": "2018-Sep-16",
+		"category": "Study",
+		"text": "24344320",
+		"title": "New study added: Nielsen et al. 2014"
+	}, {
+		"date": "2018-Sep-15",
+		"category": "Study",
+		"text": "24438502",
+		"title": "New study added: Margolin et al. 2014"
+	}, {
+		"date": "2018-Sep-13",
+		"category": "Study",
+		"text": "24463510",
+		"title": "New study added: Necsulea et al. 2014"
+	}, {
+		"date": "2018-Sep-09",
+		"category": "Study",
+		"text": "24554440",
+		"title": "New study added: Meikar et al. 2014"
+	}, {
+		"date": "2018-Sep-08",
+		"category": "Study",
+		"text": "24598113",
+		"title": "New study added: Djureinovic et al. 2014"
+	}, {
+		"date": "2018-Sep-07",
+		"category": "Study",
+		"text": "24740603",
+		"title": "New study added: Chalmel et al. 2014"
+	}, {
+		"date": "2018-Sep-06",
+		"category": "Study",
+		"text": "24813617",
+		"title": "New study added: Wang et al. 2014"
+	}, {
+		"date": "2018-Sep-05",
+		"category": "Study",
+		"text": "24835570",
+		"title": "New study added: Hammoud et al. 2014"
+	}, {
+		"date": "2018-Aug-27",
+		"category": "Study",
+		"text": "25030694",
+		"title": "New study added: Molaro et al. 2014"
+	}, {
+		"date": "2018-Aug-26",
+		"category": "Study",
+		"text": "25096407",
+		"title": "New study added: Biase et al. 2014"
+	}, {
+		"date": "2018-Aug-25",
+		"category": "Study",
+		"text": "25210130",
+		"title": "New study added: Chocu et al. 2014"
+	}, {
+		"date": "2018-Aug-24",
+		"category": "Study",
+		"text": "25228648",
+		"title": "New study added: Mu et al. 2014"
+	}, {
+		"date": "2018-Aug-23",
+		"category": "Study",
+		"text": "25280220",
+		"title": "New study added: Shen et al. 2014"
+	}, {
+		"date": "2018-Aug-22",
+		"category": "Study",
+		"text": "25409824",
+		"title": "New study added: Yue et al. 2014"
+	}, {
+		"date": "2018-Aug-20",
+		"category": "Study",
+		"text": "25450459",
+		"title": "New study added: Korfanty et al. 2014"
+	}, {
+		"date": "2018-Aug-19",
+		"category": "Study",
+		"text": "25503407",
+		"title": "New study added: Bao et al. 2015"
+	}, {
+		"date": "2018-Aug-18",
+		"category": "Study",
+		"text": "25543152",
+		"title": "New study added: Irie et al. 2015"
+	}, {
+		"date": "2018-Aug-17",
+		"category": "Study",
+		"text": "25560149",
+		"title": "New study added: Reyes et al. 2015"
+	}, {
+		"date": "2018-Aug-16",
+		"category": "Study",
+		"text": "25703348",
+		"title": "New study added: Hasegawa et al. 2015"
+	}, {
+		"date": "2018-Aug-13",
+		"category": "Study",
+		"text": "25710594",
+		"title": "New study added: Zimmermann et al. 2015"
+	}, {
+		"date": "2018-Aug-12",
+		"category": "Study",
+		"text": "25855264",
+		"title": "New study added: McClelland et al. 2015"
+	}, {
+		"date": "2018-Aug-11",
+		"category": "Study",
+		"text": "25995188",
+		"title": "New study added: Goh et al. 2015"
+	}, {
+		"date": "2018-Aug-10",
+		"category": "Study",
+		"text": "26004067",
+		"title": "New study added: Gkountela et al. 2015"
+	}, {
+		"date": "2018-Aug-09",
+		"category": "Study",
+		"text": "26046443",
+		"title": "New study added: Guo et al. 2015"
+	}, {
+		"date": "2018-Aug-08",
+		"category": "Study",
+		"text": "26046444",
+		"title": "New study added: Tang et al. 2015"
+	}, {
+		"date": "2018-Aug-07",
+		"category": "Study",
+		"text": "26109049",
+		"title": "New study added: Zamudio et al. 2015"
+	}, {
+		"date": "2018-Aug-06",
+		"category": "Study",
+		"text": "26157032",
+		"title": "New study added: Jodar et al. 2015"
+	}, {
+		"date": "2018-Aug-05",
+		"category": "Study",
+		"text": "26198001",
+		"title": "New study added: Sin et al. 2015"
+	}, {
+		"date": "2018-Aug-04",
+		"category": "Study",
+		"text": "26201400",
+		"title": "New study added: Fan et al. 2015"
+	}, {
+		"date": "2018-Aug-03",
+		"category": "Study",
+		"text": "26290333",
+		"title": "New study added: Kubo et al. 2015"
+	}, {
+		"date": "2018-Aug-02",
+		"category": "Study",
+		"text": "26377738",
+		"title": "New study added: Ayers et al. 2015"
+	}, {
+		"date": "2018-Aug-01",
+		"category": "Study",
+		"text": "26378784",
+		"title": "New study added: Soh et al. 2015"
+	}, {
+		"date": "2018-Jul-31",
+		"category": "Study",
+		"text": "26408185",
+		"title": "New study added: Veselovska et al. 2015"
+	}, {
+		"date": "2018-Jul-30",
+		"category": "Study",
+		"text": "26518232",
+		"title": "New study added: Gely-Pernot et al. 2015"
+	}, {
+		"date": "2018-Jul-29",
+		"category": "Study",
+		"text": "26545815",
+		"title": "New study added: Hammoud et al. 2015"
+	}, {
+		"date": "2018-Jul-27",
+		"category": "Study",
+		"text": "26584620",
+		"title": "New study added: Stewart et al. 2015"
+	}, {
+		"date": "2018-Jul-25",
+		"category": "Study",
+		"text": "26753906",
+		"title": "New study added: Zhu et al. 2016"
+	}, {
+		"date": "2018-Jul-24",
+		"category": "Study",
+		"text": "26836306",
+		"title": "New study added: Ancelin et al. 2016"
+	}, {
+		"date": "2018-Jul-23",
+		"category": "Study",
+		"text": "27094866",
+		"title": "New study added: da Cruz et al. 2016"
+	}, {
+		"date": "2018-Jul-22",
+		"category": "Study",
+		"text": "27105113",
+		"title": "New study added: Goudarzi et al. 2016"
+	}, {
+		"date": "2018-Jul-21",
+		"category": "Study",
+		"text": "27229484",
+		"title": "New study added: Li et al. 2016"
+	}, {
+		"date": "2018-Jul-20",
+		"category": "Study",
+		"text": "27294618",
+		"title": "New study added: Lesch et al. 2016"
+	}, {
+		"date": "2018-Jul-10",
+		"category": "Study",
+		"text": "27315811",
+		"title": "New study added: Dang et al. 2016"
+	}, {
+		"date": "2018-Jul-09",
+		"category": "Study",
+		"text": "27462457",
+		"title": "New study added: Liu et al. 2016"
+	}, {
+		"date": "2018-Jul-07",
+		"category": "Study",
+		"text": "27560004",
+		"title": "New study added: Lin et al. 2016"
+	}, {
+		"date": "2018-Jul-06",
+		"category": "Study",
+		"text": "27626377",
+		"title": "New study added: Dahl et al. 2016"
+	}, {
+		"date": "2018-Jul-04",
+		"category": "Study",
+		"text": "27626379",
+		"title": "New study added: Liu et al. 2016"
+	}, {
+		"date": "2018-Jul-03",
+		"category": "Study",
+		"text": "27626382",
+		"title": "New study added: Zhang et al. 2016"
+	}, {
+		"date": "2018-Jun-30",
+		"category": "Study",
+		"text": "27628216",
+		"title": "New study added: Schuster et al. 2016"
+	}, {
+		"date": "2018-Jun-27",
+		"category": "Study",
+		"text": "27635762",
+		"title": "New study added: Zheng et al. 2016"
+	}, {
+		"date": "2018-Jun-25",
+		"category": "Study",
+		"text": "27728778",
+		"title": "New study added: von Meyenn et al. 2016"
+	}, {
+		"date": "2018-Jun-23",
+		"category": "Study",
+		"text": "27733379",
+		"title": "New study added: Mutoji et al. 2016"
+	}, {
+		"date": "2018-Jun-21",
+		"category": "Study",
+		"text": "27750280",
+		"title": "New study added: Hikabe et al. 2016"
+	}, {
+		"date": "2018-Jun-20",
+		"category": "Study",
+		"text": "27824029",
+		"title": "New study added: Guo et al. 2016"
+	}, {
+		"date": "2018-Jun-17",
+		"category": "Study",
+		"text": "27993988",
+		"title": "New study added: Sha et al. 2016"
+	}, {
+		"date": "2018-Jun-16",
+		"category": "Study",
+		"text": "28031467",
+		"title": "New study added: Xu et al. NA"
+	}, {
+		"date": "2018-Jun-15",
+		"category": "Study",
+		"text": "28087628",
+		"title": "New study added: Helsel et al. 2017"
+	}, {
+		"date": "2018-Jun-14",
+		"category": "Study",
+		"text": "28093458",
+		"title": "New study added: Neuhaus et al. 2017"
+	}, {
+		"date": "2018-Jun-13",
+		"category": "Study",
+		"text": "28178516",
+		"title": "New study added: Jung et al. 2017"
+	}, {
+		"date": "2018-Jun-11",
+		"category": "Study",
+		"text": "28291811",
+		"title": "New study added: Zhang et al. 2017"
+	}, {
+		"date": "2018-Jun-10",
+		"category": "Study",
+		"text": "28366282",
+		"title": "New study added: Naro et al. 2017"
+	}, {
+		"date": "2018-Jun-09",
+		"category": "Study",
+		"text": "28404936",
+		"title": "New study added: Li et al. 2017"
+	}, {
+		"date": "2018-Jun-08",
+		"category": "Study",
+		"text": "28444387",
+		"title": "New study added: J\u00e9gou et al. 2017"
+	}, {
+		"date": "2018-Jun-07",
+		"category": "Study",
+		"text": "28457750",
+		"title": "New study added: Li et al. 2017"
+	}, {
+		"date": "2018-Jun-06",
+		"category": "Study",
+		"text": "28472341",
+		"title": "New study added: Rahmoun et al. 2017"
+	}, {
+		"date": "2018-Jun-03",
+		"category": "Study",
+		"text": "28506985",
+		"title": "New study added: Yin et al. 2017"
+	}, {
+		"date": "2018-Jun-02",
+		"category": "Study",
+		"text": "28552266",
+		"title": "New study added: Iwasaki et al. 2017"
+	}, {
+		"date": "2018-Jun-01",
+		"category": "Study",
+		"text": "28636946",
+		"title": "New study added: Hannigan et al. 2017"
+	}, {
+		"date": "2018-May-30",
+		"category": "Study",
+		"text": "28703188",
+		"title": "New study added: Du et al. 2017"
+	}, {
+		"date": "2018-May-29",
+		"category": "Study",
+		"text": "28935708",
+		"title": "New study added: Jan et al. 2017"
+	}, {
+		"date": "2018-May-28",
+		"category": "Study",
+		"text": "28938749",
+		"title": "New study added: Ramaswamy et al. 2017"
+	}, {
+		"date": "2018-May-27",
+		"category": "Study",
+		"text": "28985528",
+		"title": "New study added: Guo et al. 2017"
+	}, {
+		"date": "2018-May-24",
+		"category": "Study",
+		"text": "29025019",
+		"title": "New study added: Reyes et al. 2017"
+	}, {
+		"date": "2018-May-23",
+		"category": "Study",
+		"text": "29025079",
+		"title": "New study added: Chitwood et al. 2017"
+	}, {
+		"date": "2018-May-22",
+		"category": "Study",
+		"text": "29040751",
+		"title": "New study added: Mao et al. 2018"
+	}, {
+		"date": "2018-May-20",
+		"category": "Study",
+		"text": "29044429",
+		"title": "New study added: Wichman et al. 2017"
+	}, {
+		"date": "2018-May-19",
+		"category": "Study",
+		"text": "29126117",
+		"title": "New study added: Maezawa et al. 2017"
+	}, {
+		"date": "2018-May-18",
+		"category": "Study",
+		"text": "29186436",
+		"title": "New study added: Winge et al. 2017"
+	}, {
+		"date": "2018-May-17",
+		"category": "Study",
+		"text": "29425512",
+		"title": "New study added: St\u00e9vant et al. 2018"
+	}, {
+		"date": "2018-May-16",
+		"category": "Study",
+		"text": "29474909",
+		"title": "New study added: Han et al. 2018"
+	}, {
+		"date": "2018-May-15",
+		"category": "Study",
+		"text": "29482626",
+		"title": "New study added: Skinner et al. 2018"
+	}, {
+		"date": "2018-May-13",
+		"category": "Study",
+		"text": "29593303",
+		"title": "New study added: Ben Maamar et al. 2018"
+	}, {
+		"date": "2018-May-12",
+		"category": "Study",
+		"text": "29674518",
+		"title": "New study added: Thibault-Sennett et al. 2018"
+	}, {
+		"date": "2018-May-10",
+		"category": "Study",
+		"text": "29695820",
+		"title": "New study added: Lukassen et al. 2018"
+	}, {
+		"date": "2018-May-09",
+		"category": "Study",
+		"text": "29732173",
+		"title": "New study added: Ben Maamar et al. 2018"
+	}, {
+		"date": "2018-May-07",
+		"category": "Study",
+		"text": "29789566",
+		"title": "New study added: Winge et al. 2018"
+	}, {
+		"date": "2018-May-06",
+		"category": "Study",
+		"text": "29848638",
+		"title": "New study added: Zhang et al. 2018"
+	}, {
+		"date": "2018-May-05",
+		"category": "Study",
+		"text": "30026551",
+		"title": "New study added: La et al. 2018"
+	}, {
+		"date": "2018-May-04",
+		"category": "Study",
+		"text": "30053582",
+		"title": "New study added: Zhao et al. 2018"
+	}, {
+		"date": "2018-May-03",
+		"category": "Study",
+		"text": "30061742",
+		"title": "New study added: Chen et al. 2018"
+	}, {
+		"date": "2018-May-01",
+		"category": "Study",
+		"text": "30146481",
+		"title": "New study added: Green et al. 2018"
+	}, {
+		"date": "2018-Apr-30",
+		"category": "Study",
+		"text": "30174296",
+		"title": "New study added: Wang et al. 2018"
+	},
+    {
       "title" : "Single-cell visualization tool",
-      "text" : "Use the two dimensional visualization tool for single-cell dataset exploration.",
+      "text" : "Use the 2D visualization tool for single-cell dataset exploration.",
       "category": "Tool",
       "date": "2017/12/15"
     },
@@ -18,66 +650,12 @@
       "category": "Study",
       "date": "2018/02/01"
     },
-    {"category": "Study", "text": "The ENCODE (ENCyclopedia Of DNA Elements) Project.", "date": "2018/05/18", "title": "New study added: ENCODE Project Consortium et al"},
-    {"category": "Study", "text": "The NIH Roadmap Epigenomics Mapping Consortium.", "date": "2018/05/18", "title": "New study added: Bernstein BE et al"},
-    {"category": "Study", "text": "Integrative annotation of human large intergenic noncoding RNAs reveals global properties and specific subclasses.", "date": "2018/05/18", "title": "New study added: Cabili MN et al"},
-    {"category": "Study", "text": "The evolution of gene expression levels in mammalian organs.", "date": "2018/05/18", "title": "New study added: Brawand D et al"},
-    {"category": "Study", "text": "A quantitative atlas of polyadenylation in five mammals.", "date": "2018/05/18", "title": "New study added: Derti A et al"},
-    {"category": "Study", "text": "A map of the cis-regulatory sequences in the mouse genome.", "date": "2018/05/18", "title": "New study added: Shen Y et al"},
-    {"category": "Study", "text": "Mili and Miwi target RNA repertoire reveals piRNA biogenesis and function of Miwi in spermiogenesis.", "date": "2018/05/18", "title": "New study added: Vourekas A et al"},
-    {"category": "Study", "text": "The dynamics of genome-wide DNA methylation reprogramming in mouse primordial germ cells.", "date": "2018/05/18", "title": "New study added: Seisenberger S et al"},
-    {"category": "Study", "text": "The ontogeny of cKIT+ human primordial germ cells proves to be a resource for human germ line reprogramming, imprint erasure and in vitro differentiation.", "date": "2018/05/18", "title": "New study added: Gkountela S et al"},
-    {"category": "Study", "text": "PRC1 coordinates timing of sexual differentiation of female primordial germ cells.", "date": "2018/05/18", "title": "New study added: Yokobayashi S et al"},
-    {"category": "Study", "text": "An ancient transcription factor initiates the burst of piRNA production during early meiosis in mouse testes.", "date": "2018/05/18", "title": "New study added: Li XZ et al"},
-    {"category": "Study", "text": "Sperm, but not oocyte, DNA methylome is inherited by zebrafish early embryos.", "date": "2018/05/18", "title": "New study added: Jiang L et al"},
-    {"category": "Study", "text": "Dynamics of 5-hydroxymethylcytosine during mouse spermatogenesis.", "date": "2018/05/18", "title": "New study added: Gan H et al"},
-    {"category": "Study", "text": "Molecular determinants of nucleosome retention at CpG-rich sequences in mouse spermatozoa.", "date": "2018/05/18", "title": "New study added: Erkek S et al"},
-    {"category": "Study", "text": "Cellular source and mechanisms of high transcriptome complexity in the mammalian testis.", "date": "2018/05/18", "title": "New study added: Soumillon M et al"},
-    {"category": "Study", "text": "A set of genes critical to development is epigenetically poised in mouse germ cells from fetal stages through completion of meiosis.", "date": "2018/05/18", "title": "New study added: Lesch BJ et al"},
-    {"category": "Study", "text": "Identification of expressed and conserved human noncoding RNAs.", "date": "2018/05/18", "title": "New study added: Nielsen MM et al"},
-    {"category": "Study", "text": "Integrated transcriptome analysis of mouse spermatogenesis.", "date": "2018/05/18", "title": "New study added: Margolin G et al"},
-    {"category": "Study", "text": "The evolution of lncRNA repertoires and expression patterns in tetrapods.", "date": "2018/05/18", "title": "New study added: Necsulea A et al"},
-    {"category": "Study", "text": "An atlas of chromatoid body components.", "date": "2018/05/18", "title": "New study added: Meikar O et al"},
-    {"category": "Study", "text": "The human testis-specific proteome defined by transcriptomics and antibody-based profiling.", "date": "2018/05/18", "title": "New study added: Djureinovic D et al"},
-    {"category": "Study", "text": "High-resolution profiling of novel transcribed regions during rat spermatogenesis.", "date": "2018/05/18", "title": "New study added: Chalmel F et al"},
-    {"category": "Study", "text": "Programming and inheritance of parental DNA methylomes in mammals.", "date": "2018/05/18", "title": "New study added: Wang L et al"},
-    {"category": "Study", "text": "Chromatin and transcription transitions of mammalian adult germline stem cells and spermatogenesis.", "date": "2018/05/18", "title": "New study added: Hammoud SS et al"},
-    {"category": "Study", "text": "Two waves of de novo methylation during mouse germ cell development.", "date": "2018/05/18", "title": "New study added: Molaro A et al"},
-    {"category": "Study", "text": "Forty-four novel protein-coding loci discovered using a proteomics informed by transcriptomics (PIT) approach in rat male germ cells.", "date": "2018/05/18", "title": "New study added: Chocu S et al"},
-    {"category": "Study", "text": "A comparative encyclopedia of DNA elements in the mouse genome.", "date": "2018/05/18", "title": "New study added: Yue F et al"},
-    {"category": "Study", "text": "UPF2, a nonsense-mediated mRNA decay factor, is required for prepubertal Sertoli cell development and male fertility by ensuring fidelity of the transcriptome.", "date": "2018/05/18", "title": "New study added: Bao J et al"},
-    {"category": "Study", "text": "SOX17 is a critical specifier of human primordial germ cell fate.", "date": "2018/05/18", "title": "New study added: Irie N et al"},
-    {"category": "Study", "text": "Research resource: the dynamic transcriptional profile of sertoli cells during the progression of spermatogenesis.", "date": "2018/05/18", "title": "New study added: Zimmermann C et al"},
-    {"category": "Study", "text": "Purification and Transcriptomic Analysis of Mouse Fetal Leydig Cells Reveals Candidate Genes for Specification of Gonadal Steroidogenic Cells.", "date": "2018/05/18", "title": "New study added: McClelland KS et al"},
-    {"category": "Study", "text": "piRNA-directed cleavage of meiotic transcripts regulates spermatogenesis.", "date": "2018/05/18", "title": "New study added: Goh WS et al"},
-    {"category": "Study", "text": "DNA Demethylation Dynamics in the Human Prenatal Germline.", "date": "2018/05/18", "title": "New study added: Gkountela S et al"},
-    {"category": "Study", "text": "The Transcriptome and DNA Methylome Landscapes of Human Primordial Germ Cells.", "date": "2018/05/18", "title": "New study added: Guo F et al"},
-    {"category": "Study", "text": "A Unique Gene Regulatory Network Resets the Human Germline Epigenome for Development.", "date": "2018/05/18", "title": "New study added: Tang WW et al"},
-    {"category": "Study", "text": "DNA methylation and gene expression dynamics during spermatogonial stem cell differentiation in the early postnatal mouse testis.", "date": "2018/05/18", "title": "New study added: Kubo N et al"},
-    {"category": "Study", "text": "Identification of candidate gonadal sex differentiation genes in the chicken embryo using RNA-seq.", "date": "2018/05/18", "title": "New study added: Ayers KL et al"},
-    {"category": "Study", "text": "A Gene Regulatory Program for Meiotic Prophase in the Fetal Ovary.", "date": "2018/05/18", "title": "New study added: Soh YQ et al"},
-    {"category": "Study", "text": "Transcription and imprinting dynamics in developing postnatal male germline stem cells.", "date": "2018/05/18", "title": "New study added: Hammoud SS et al"},
-    {"category": "Study", "text": "Dynamics of the Transcriptome during Human Spermatogenesis: Predicting the Potential Key Genes Regulating Male Gametes Generation.", "date": "2018/05/18", "title": "New study added: Zhu Z et al"},
-    {"category": "Study", "text": "Transcriptome analysis of highly purified mouse spermatogenic cell populations: gene expression signatures switch from meiotic-to postmeiotic-related processes at pachytene stage.", "date": "2018/05/18", "title": "New study added: da Cruz I et al"},
-    {"category": "Study", "text": "Genome-wide differential expression of genes and small RNAs in testis of two different porcine breeds and at two different ages.", "date": "2018/05/18", "title": "New study added: Li Y et al"},
-    {"category": "Study", "text": "Expression dynamics, relationships, and transcriptional regulations of diverse transcripts in mouse spermatogenic cells.", "date": "2018/05/18", "title": "New study added: Lin X et al"},
-    {"category": "Study", "text": "SpermBase: A Database for Sperm-Borne RNA Contents.", "date": "2018/05/18", "title": "New study added: Schuster A et al"},
-    {"category": "Study", "text": "Comparative Principles of DNA Methylation Reprogramming during Human and Mouse In Vitro Primordial Germ Cell Specification.", "date": "2018/05/18", "title": "New study added: von Meyenn F et al"},
-    {"category": "Study", "text": "TSPAN8 Expression Distinguishes Spermatogonial Stem Cells in the Prepubertal Mouse Testis.", "date": "2018/05/18", "title": "New study added: Mutoji K et al"},
-    {"category": "Study", "text": "DNA methylation and chromatin accessibility profiling of mouse and human fetal germ cells.", "date": "2018/05/18", "title": "New study added: Guo H et al"},
-    {"category": "Study", "text": "ID4 levels dictate the stem cell state in mouse spermatogonia.", "date": "2018/05/18", "title": "New study added: Helsel AR et al"},
-    {"category": "Study", "text": "Single-cell gene expression analysis reveals diversity among human spermatogonia.", "date": "2018/05/18", "title": "New study added: Neuhaus N et al"},
-    {"category": "Study", "text": "Systematic identification and characterization of long non-coding RNAs in mouse mature sperm.", "date": "2018/05/18", "title": "New study added: Zhang X et al"},
-    {"category": "Study", "text": "An Orchestrated Intron Retention Program in Meiosis Controls Timely Usage of Transcripts during Germ Cell Differentiation.", "date": "2018/05/18", "title": "New study added: Naro C et al"},
-    {"category": "Study", "text": "Systematic identification and comparison of expressed profiles of lncRNAs and circRNAs with associated co-expression and ceRNA networks in mouse germline stem cells.", "date": "2018/05/18", "title": "New study added: Li X et al"},
-    {"category": "Study", "text": "Meiotic Genes Are Enriched in Regions of Reduced Archaic Ancestry.", "date": "2018/05/18", "title": "New study added: Jégou B et al"},
-    {"category": "Study", "text": "Single-Cell RNA-Seq Analysis Maps Development of Human Germline Cells and Gonadal Niche Interactions.", "date": "2018/05/18", "title": "New study added: Li L et al"},
-    {"category": "Study", "text": "Deep sequencing and high-throughput analysis of PIWI-associated small RNAs.", "date": "2018/05/18", "title": "New study added: Iwasaki YW et al"},
-    {"category": "Study", "text": "Ptbp2 Controls an Alternative Splicing Network Required for Cell Communication during Spermatogenesis.", "date": "2018/05/18", "title": "New study added: Hannigan MM et al"},
-    {"category": "Study", "text": "Unraveling transcriptome dynamics in human spermatogenesis.", "date": "2018/05/18", "title": "New study added: Jan SZ et al"},
-    {"category": "Study", "text": "The testicular transcriptome associated with spermatogonia differentiation initiated by gonadotrophin stimulation in the juvenile rhesus monkey (Macaca mulatta).", "date": "2018/05/18", "title": "New study added: Ramaswamy S et al"},
-    {"category": "Study", "text": "Chromatin and Single-Cell RNA-Seq Profiling Reveal Dynamic Signaling and Metabolic Transitions during Human Spermatogonial Stem Cell Development.", "date": "2018/05/18", "title": "New study added: Guo J et al"},
-    {"category": "Study", "text": "Dynamic expression of long noncoding RNAs reveals their potential roles in spermatogenesis and fertility.", "date": "2018/05/18", "title": "New study added: Wichman L et al"},
-    {"category": "Study", "text": "Deciphering Cell Lineage Specification during Male Sex Determination with Single-Cell RNA Sequencing.", "date": "2018/05/18", "title": "New study added: Stévant I et al"}
+    {
+      "title" : "Welcome to RGV 2.0",
+      "text" : "The new version of RGV is now available. Discover what’s new in RGV now.",
+      "category": "Information",
+      "date": "2017/12/12"
+    }
+    
   ]
 }

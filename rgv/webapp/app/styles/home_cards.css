@@ -42,6 +42,12 @@
   background: url("../images/home_scatter.png") center no-repeat;
   background-size: cover;
 }
+
+.blog-card .photo.photo4 {
+  background: url("../images/home_density.png") center no-repeat;
+  background-size: cover;
+}
+
 .blog-card .details {
   transition: all 0.3s ease;
   -webkit-transition: all 0.3s ease;

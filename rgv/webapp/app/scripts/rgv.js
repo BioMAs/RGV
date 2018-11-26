@@ -187,7 +187,7 @@ angular.module('rgv').controller('studiesCtrl',
             $scope.cellsorted = value.cell_sorted;
             $scope.keywords = value.keywords;
             $scope.alltech = value.alltech;
-            console.log($scope.alltech)
+            //console.log($scope.alltech)
     
             //copy the references (you could clone ie angular.copy but then have to go through a dirty checking for the matches)
             $scope.displayedCollection = [].concat($scope.data_all);
@@ -238,10 +238,10 @@ angular.module('rgv').controller('involvedCtrl',
         $scope.msg="";
         $scope.suggest = function(){
             //check form
-            console.log("SENDEMAIL")
+            //console.log("SENDEMAIL")
 
             $scope.msg={'type':null,'value':[]};
-            console.log($scope.msg);
+            //console.log($scope.msg);
             //Format if null
             
             if($scope.article_title === undefined || $scope.article_title == ''){
@@ -279,11 +279,11 @@ angular.module('rgv').controller('involvedCtrl',
                 $scope.msg.type = 'warning';
                 $scope.msg.value.push('Please supply the good verification code');
             }
-            console.log($scope.article_title,$scope.first_name,$scope.last_name,$scope.email)
+            //console.log($scope.article_title,$scope.first_name,$scope.last_name,$scope.email)
 
-            console.log($scope.msg);
+            //console.log($scope.msg);
             if($scope.msg.type != null){
-                console.log($scope.msg);
+                //console.log($scope.msg);
                 return $scope.msg;
             } else{
                 //Format mail
@@ -461,7 +461,7 @@ angular.module('rgv').controller('contactCtrl',
            link2 += (key2.charAt(ltr2));
          }
        }
-       console.log(link2);
+       //console.log(link2);
       document.getElementById("oliviermail").innerHTML = "<a class='btn btn-primary btn-twitter btn-sm'  href='mailto:"+link2+"'><i class='fa fa-envelope' aria-hidden='true'></i></a>";
 
 });
@@ -474,10 +474,10 @@ angular.module('rgv').controller('newsCtrl',
 
       //Récupération news from local json file
       Dataset.news_feed().$promise.then(function(news){
-        console.log(news);
+        //console.log(news);
         if(news.status != 1){
           $scope.newsfeed = news.data["news_list"];
-          console.log($scope.newsfeed);
+          //console.log($scope.newsfeed);
         }
         else {
           $scope.msg = news.msg;
@@ -524,7 +524,7 @@ function ($scope,$rootScope,$http,$filter,Auth, Dataset,uiGridConstants,$resourc
         }
     }
     var user = Auth.getUser();
-    console.log(user);
+    //console.log(user);
 
     $scope.lastgenes={};
     $scope.val_button = {};
@@ -591,7 +591,7 @@ function ($scope,$rootScope,$http,$filter,Auth, Dataset,uiGridConstants,$resourc
                     $scope.time = response.time;
                     $scope.charts = response.charts;
                     
-                    console.log(response);
+                    //console.log(response);
                 });
 
             }
@@ -848,7 +848,7 @@ function ($scope,$rootScope,$http,$filter,Auth, Dataset,uiGridConstants,$resourc
 
                 $scope.time = response.time;
                 $scope.charts = response.charts;
-                console.log($scope.charts);
+                //console.log($scope.charts);
             });
         }else{
             $scope.msgwrn ="No data available. Please select other studies or contact RGV support.";
@@ -937,11 +937,8 @@ function ($scope,$rootScope,$http,$filter,Auth, Dataset,uiGridConstants,$resourc
 
 ////////////////////// Density Browser////////////////////////////////////////
 angular.module('rgv').controller('browser_densityCtrl',
-function ($scope,$rootScope,$http,$filter, Dataset, Auth, uiGridConstants, $q, $templateCache) {
-    
-    var user = Auth.getUser();
-
-        //Get Gene level information
+function ($scope,$rootScope,$http,$filter,Auth, Dataset,uiGridConstants,$resource, $q, $templateCache) {
+    //Get Gene level information
     $scope.dispalaySpe = function(dict, value){
         for(var key in dict) {
             if(dict[key] === value) {
@@ -949,20 +946,215 @@ function ($scope,$rootScope,$http,$filter, Dataset, Auth, uiGridConstants, $q, $
             }
         }
     }
+    var user = Auth.getUser();
+    //console.log(user);
+
+    $scope.lastgenes={};
+    $scope.val_button = {};
+    $scope.display_genes = {};
+    $scope.displayGeneExp = function(selected_lst,selected_class,selected_gene,model,stud){
+        
+
+        console.log(Object.keys($scope.display_genes).length)
+        $scope.msg = [];
+        var directory_list = [];
+        var genes_list = {};
+        for (var i=0;i<selected_lst.length;i++){
+            if (selected_lst[i].path !=null){
+                directory_list.push(selected_lst[i].path);
+            }else{
+                $scope.msg.push(" No data available for study: "+selected_lst[i].Study+';');
+            }
+        }
+
+        var studList = [];
+        if (selected_gene.GeneID !=null){
+            $scope.lastgenes[selected_gene['stud_name']] = selected_gene;
+            for(var stud in $scope.lastgenes){
+                studList.push(stud);
+                genes_list[$scope.lastgenes[stud].GeneID] = {'ensembl':$scope.lastgenes[stud].EnsemblID,'symbol':$scope.lastgenes[stud].Symbol,'study':stud};
+                var key = $scope.lastgenes[stud].GeneID+"$"+stud;
+                var checkBox = document.getElementById("select-"+$scope.lastgenes[stud].Symbol);
+                if (key in $scope.display_genes){
+                    delete $scope.display_genes[key];
+                    checkBox.checked = false;
+                    $scope.val_button[stud][selected_gene.Symbol] = false;
+                } else {
+                    $scope.display_genes[key] = genes_list;
+                    $scope.val_button[stud][selected_gene.Symbol] = true;
+                }
+                
+            }
+        }
+
+        if (Object.keys($scope.display_genes).length == 0) {
+            if(directory_list.length > 0){
+                //test
+
+                console.log(directory_list);
+                Dataset.densitylevel({},{'directory':directory_list,'conditions':'scRNA-seq','genes':'','name':'','class':selected_class,'model':model}).$promise.then(function(response){
+                    $scope.time = response.time;
+                    $scope.charts = response.charts;
+                    
+                });
+            }else{
+                $scope.msgwrn ="No data available. Please select other studies or contact RGV support.";
+                return $scope.msgwrn;
+            }
+        }
+        else {
+            if(directory_list.length > 0){
+                console.log(directory_list);
+                console.log(genes_list);
+                console.log($scope.display_genes);
+                Dataset.densityGenes({},{'directory':directory_list,'conditions':'scRNA-seq','genes':$scope.display_genes,'class':selected_class,'model':model,'studies':studList}).$promise.then(function(response){
+   
+                    $scope.time = response.time;
+                    $scope.charts = response.charts;
+                    
+                    //console.log(response);
+                });
+
+            }
+        }
+    };
     
-    //Update grid2 en fonction de la selection de la grid1
-    $scope.updateSelection = function() {
-        console.log("Update");
-        $scope.gridApi.grid.refresh();
+
+    //GridData (ag-grid) system definition
+    $scope.main = {};
+    $scope.second = {};
+    $scope.filterValue = null;
+    $scope.users;
+    $scope.chosen = [];
+    $scope.selected_gene = [];
+    $scope.allgenes = {};
+
+
+    //liste obj selectionnés
+    
+    //Species list & tax_id
+    $scope.speciesValue = null;
+    Dataset.read_file({"name":"genomes"}).$promise.then(function(dataset){
+        $scope.species = []
+        for (var i=0;i<dataset.data.line.length;i++){
+            var field = dataset.data.line[i].split('\t');
+            $scope.species.push({'name':field[0],'tax_id':field[2].replace(/[\n]/gi, "" )});
+        }
+    });
+
+    $scope.getTaxID = function(Species,speciesDict){
+        for(var i=0;i<speciesDict.length;i++){
+            if(speciesDict[i].name == Species){
+                $scope.speciesValue = speciesDict[i].tax_id;
+                return speciesDict[i].tax_id
+            }
+        }
+    }
+    $scope.selected = [];
+
+    // Function to get data for all selected items
+    $scope.selectAll = function (collection) {
+    
+        // if there are no items in the 'selected' array, 
+        // push all elements to 'selected'
+        if ($scope.selected.length === 0) {
+        
+        angular.forEach(collection, function(val) {
+            
+            $scope.selected.push(val); 
+            
+        });
+        
+        // if there are items in the 'selected' array, 
+        // add only those that ar not
+        } else if ($scope.selected.length > 0 && $scope.selected.length != $scope.data.length) {
+        
+        angular.forEach(collection, function(val) {
+            
+            var found = $scope.selected.indexOf(val);
+            
+            if(found == -1) $scope.selected.push(val);
+            
+        });
+        
+        // Otherwise, remove all items
+        } else  {
+        
+            $scope.selected = [];
+        
+        }
+    
     };
+  
+  // Function to get data by selecting a single row
+  $scope.select = function(id) {
+    
+    var found = $scope.selected.indexOf(id);
+    
+    if(found == -1) $scope.selected.push(id);
+    
+    else $scope.selected.splice(found, 1);
+    
+  }
+    
+    if (user == null){
 
-    //Display block
-    $scope.displayStep = function(id){
-        $scope.selected_gene =[];
+    
+        var startPromise = Dataset.data_frame({"name":"metadata.csv","user":"none"}).$promise.then(function(response){
+            return $q.when(response)
+        })
+        startPromise.then(function(value){
+            
+            $scope.data_all = value.data;
+            $scope.ome = value.ome;
+            $scope.allspe = value.species;
+            $scope.techno = value.technology;
+            $scope.sex = value.sex;
+            $scope.experimentaldesign = value.experimental_design;
+            $scope.biotop = value.biological_topics;
+            $scope.tissues = value.tissue_or_cell;
+            $scope.stage = value.developmental_stage;
+            $scope.age = value.age;
+            $scope.antibody = value.antibody;
+            $scope.mutant = value.mutant;
+            $scope.cellsorted = value.cell_sorted;
+            $scope.keywords = value.keywords;
 
-        document.getElementById(id).style.visibility = "visible";
-    };
+            //copy the references (you could clone ie angular.copy but then have to go through a dirty checking for the matches)
+                $scope.displayedCollection = [].concat($scope.data_all);
 
+        
+        });
+    }
+
+    if (user != null){
+        var startPromise = Dataset.data_frame({"name":"metadata.csv","user":user.id}).$promise.then(function(response){
+            return $q.when(response)
+        })
+        startPromise.then(function(value){
+
+            $scope.data_all = value.data;
+            $scope.ome = value.ome;
+            $scope.allspe = value.species;
+            $scope.techno = value.technology;
+            $scope.sex = value.sex;
+            $scope.experimentaldesign = value.experimental_design;
+            $scope.biotop = value.biological_topics;
+            $scope.tissues = value.tissue_or_cell;
+            $scope.stage = value.developmental_stage;
+            $scope.age = value.age;
+            $scope.antibody = value.antibody;
+            $scope.mutant = value.mutant;
+            $scope.cellsorted = value.cell_sorted;
+            $scope.keywords = value.keywords;
+
+            //copy the references (you could clone ie angular.copy but then have to go through a dirty checking for the matches)
+                $scope.displayedCollection = [].concat($scope.data_all);
+
+        
+        });
+    }
+    
     $scope.replaceString = function(stingToReplace){
         if (stingToReplace == null){
             return " ";
@@ -977,105 +1169,6 @@ function ($scope,$rootScope,$http,$filter, Dataset, Auth, uiGridConstants, $q, $
         
     }
 
-    $scope.replaceStringtoList = function(stingToReplace){
-        if (stingToReplace == null){
-            return [""];
-        }
-        if (stingToReplace.indexOf('|') > -1){
-            var finalString = stingToReplace.split('|');
-            return finalString;
-        } else {
-            return [stingToReplace];
-        }
-    }
-
-
-    $scope.filterValue = null;
-    $scope.users;
-    $scope.chosen = [];
-    $scope.selected_gene = [];
-    $scope.allgenes = {};
-
-
-    //liste obj selectionnés
-    
-    //Species list & tax_id
-    $scope.speciesValue = null;
-    Dataset.read_file({"name":"genomes"}).$promise.then(function(dataset){
-        $scope.species = []
-        console.log(dataset);
-        for (var i=0;i<dataset.data.line.length;i++){
-            var field = dataset.data.line[i].split('\t');
-            $scope.species.push({'name':field[0],'tax_id':field[2].replace(/[\n]/gi, "" )});
-        }
-        console.log($scope.species);
-    });
-
-    $scope.getTaxID = function(Species,speciesDict){
-        for(var i=0;i<speciesDict.length;i++){
-            if(speciesDict[i].name == Species){
-                $scope.speciesValue = speciesDict[i].tax_id;
-                return speciesDict[i].tax_id
-            }
-        }
-    }
-    
-    if (user == null){
-
-    
-        var startPromise = Dataset.data_frame({"name":"metadata.csv","user":"none"}).$promise.then(function(response){
-            return $q.when(response)
-        })
-        startPromise.then(function(value){
-            $scope.data_all = value.data;
-            $scope.ome = value.ome;
-            $scope.allspe = value.species;
-            $scope.techno = value.technology;
-            $scope.sex = value.sex;
-            $scope.experimentaldesign = value.experimental_design;
-            $scope.biotop = value.biological_topics;
-            $scope.tissues = value.tissue_or_cell;
-            $scope.stage = value.developmental_stage;
-            $scope.age = value.age;
-            $scope.antibody = value.antibody;
-            $scope.mutant = value.mutant;
-            $scope.cellsorted = value.cell_sorted;
-            $scope.keywords = value.keywords;
-            //copy the references (you could clone ie angular.copy but then have to go through a dirty checking for the matches)
-                $scope.displayedCollection = [].concat($scope.data_all);
-
-        
-        });
-    }
-
-    if (user != null){
-        var startPromise = Dataset.data_frame({"name":"metadata.csv","user":user.id}).$promise.then(function(response){
-            return $q.when(response)
-        })
-        startPromise.then(function(value){
-            $scope.data_all = value.data;
-            $scope.ome = value.ome;
-            $scope.allspe = value.species;
-            $scope.techno = value.technology;
-            $scope.sex = value.sex;
-            $scope.experimentaldesign = value.experimental_design;
-            $scope.biotop = value.biological_topics;
-            $scope.tissues = value.tissue_or_cell;
-            $scope.stage = value.developmental_stage;
-            $scope.age = value.age;
-            $scope.antibody = value.antibody;
-            $scope.mutant = value.mutant;
-            $scope.cellsorted = value.cell_sorted;
-            $scope.keywords = value.keywords;
-
-
-            //copy the references (you could clone ie angular.copy but then have to go through a dirty checking for the matches)
-                $scope.displayedCollection = [].concat($scope.data_all);
-
-        
-        });
-    }      
-
     $scope.multiFile = null;
 
     $scope.hasSelected = function(){
@@ -1083,7 +1176,6 @@ function ($scope,$rootScope,$http,$filter, Dataset, Auth, uiGridConstants, $q, $
             isSelected: true
             }, true);
         $scope.chosen = selectedRows;
-        console.log($scope.chosen);
         $scope.multiFile = selectedRows;
         return true;
     };
@@ -1131,17 +1223,33 @@ function ($scope,$rootScope,$http,$filter, Dataset, Auth, uiGridConstants, $q, $
         return names
     }
 
+    $scope.replaceStringtoList = function(stingToReplace){
+        if (stingToReplace == null){
+            return [""];
+        }
+        if (stingToReplace.indexOf('|') > -1){
+            var finalString = stingToReplace.split('|');
+            return finalString;
+        } else {
+            return [stingToReplace];
+        }
+    }
 
     $scope.selected_class ='';
     $scope.models = {};
     //Fonction visualisation gene Level
     $scope.msg = []
-    $scope.showData = function(selected_lst,select_class,genes,model){
-        var selectedRows = $filter("filter")($scope.data_all, {
-            isSelected: true
-            }, true);
+    $scope.showData = function(selected_lst,select_class,model){
 
-        $scope.chosen = selectedRows;
+        if($scope.val_button.length > 0){
+            for( var y in scope.val_button){
+                for (var x in $scope.val_button[stud]){
+                    $scope.val_button[y][x] = "Display"
+                }
+            }
+        }
+        
+        
         selected_lst = $scope.chosen;
         $scope.msg = [];
         var directory_list = [];
@@ -1157,13 +1265,11 @@ function ($scope,$rootScope,$http,$filter, Dataset, Auth, uiGridConstants, $q, $
         }
         if(directory_list.length > 0){
             //test
-            Dataset.densitylevel({},{'directory':directory_list,'genes':genes,'class':select_class,'name':name,'model':model}).$promise.then(function(response){
+            Dataset.densitylevel({},{'directory':directory_list,'conditions':'scRNA-seq','genes':'','class':select_class,'name':name,'model':model}).$promise.then(function(response){
 
                 $scope.time = response.time;
-                $scope.response = response;
-                console.log(response);
-
-
+                $scope.charts = response.charts;
+                //console.log($scope.charts);
             });
         }else{
             $scope.msgwrn ="No data available. Please select other studies or contact RGV support.";
@@ -1171,7 +1277,6 @@ function ($scope,$rootScope,$http,$filter, Dataset, Auth, uiGridConstants, $q, $
         }
         
     }
-    
     $scope.get_item = function(item, model,label){
         $scope.higlight_gene = item;
      };
@@ -1180,20 +1285,27 @@ function ($scope,$rootScope,$http,$filter, Dataset, Auth, uiGridConstants, $q, $
         $scope.msg = []
         var name = stud.path;
         selectedgene['stud_name'] = name;
+        selectedgene['display'] = false;
+        if ($scope.val_button[name] == undefined ){
+            $scope.val_button[name] = {};
+        }
 
         if ($scope.allgenes.hasOwnProperty(name)) {
             if ($scope.allgenes[name] != undefined){
                 var index = $scope.allgenes[name].indexOf(selectedgene);
             if ( index != -1){
-                $scope.allgenes[name].splice(index,1);                   
+                $scope.allgenes[name].splice(index,1);
+                $scope.val_button[selectedgene.Symbol] = {}
             } else{
                     $scope.allgenes[name].push(selectedgene);
+                    $scope.val_button[name][selectedgene.Symbol]= false
                     selectedgene = undefined;     
                 }
             }
         } else {
             $scope.allgenes[name] = [];
             $scope.allgenes[name].push(selectedgene)
+            $scope.val_button[name][selectedgene.Symbol]= false
         }
     }
 
@@ -1206,11 +1318,22 @@ function ($scope,$rootScope,$http,$filter, Dataset, Auth, uiGridConstants, $q, $
 
     $scope.remove_study = function(study){
         var index = $scope.chosen.indexOf(study);
-        console.log(study)
         if ( index != -1){
             $scope.chosen.splice(index,1);
         };
     }
+
+    $scope.select_study = function(study){
+        study.selected ? study.selected = false : study.selected = true;
+    }
+
+    $scope.getAllSelectedRows = function() {
+        var selectedRows = $filter("filter")($scope.data_all, {
+          isSelected: true
+        }, true);
+        
+        $scope.chosen = selectedRows;
+      }
     
     $scope.get_genes = function(val,database,stud,speciesDict) {
         var species_val = '';
@@ -1219,16 +1342,18 @@ function ($scope,$rootScope,$http,$filter, Dataset, Auth, uiGridConstants, $q, $
                 species_val = speciesDict[i].tax_id;
             }
         }
-        console.log(stud.species)
         return Dataset.autocomplete({},{'database':database,'search':val,'tax_id':species_val}).$promise.then(function(data){
             return data.map(function(item){
                     return item;
             });
         });
     };
-      
-});
 
+
+                
+
+    
+});
 
 ////////////////////// HEATMAP ////////////////////////////////////////
 ////////////////////// HEATMAP ////////////////////////////////////////
@@ -1257,9 +1382,9 @@ function ($scope,$rootScope,$http,$filter, Dataset,uiGridConstants, $q, $templat
             }
         }
         var species_val = "10090"; // Comment in prod
-        console.log(list_x);
+        //console.log(list_x);
         Dataset.checkgene({"list":list_x,"tax_id":species_val}).$promise.then(function(dataset){
-            console.log(dataset.data);
+            //console.log(dataset.data);
             $scope.checklistofgenes = dataset.data;
         });    
     }
@@ -1267,7 +1392,7 @@ function ($scope,$rootScope,$http,$filter, Dataset,uiGridConstants, $q, $templat
 
     //Update grid2 en fonction de la selection de la grid1
     $scope.updateSelection = function() {
-        console.log("Update");
+        //console.log("Update");
         $scope.gridApi.grid.refresh();
     };
 
@@ -1293,12 +1418,12 @@ function ($scope,$rootScope,$http,$filter, Dataset,uiGridConstants, $q, $templat
     $scope.speciesValue = null;
     Dataset.read_file({"name":"genomes"}).$promise.then(function(dataset){
         $scope.species = []
-        console.log(dataset);
+        //console.log(dataset);
         for (var i=0;i<dataset.data.line.length;i++){
             var field = dataset.data.line[i].split('\t');
             $scope.species.push({'name':field[0],'tax_id':field[2].replace(/[\n]/gi, "" )});
         }
-        console.log($scope.species);
+        //console.log($scope.species);
     });
 
     $scope.getTaxID = function(Species,speciesDict){
@@ -1314,7 +1439,7 @@ function ($scope,$rootScope,$http,$filter, Dataset,uiGridConstants, $q, $templat
         return $q.when(response)
     })
     startPromise.then(function(value){
-        console.log(value)
+        //console.log(value)
         var data_all = value.data;
         $scope.filterD = value.filter;
         //Angular UI-grid
@@ -1336,7 +1461,7 @@ function ($scope,$rootScope,$http,$filter, Dataset,uiGridConstants, $q, $templat
     
     
     $scope.violinPlot = function(data){
-        console.log(data);
+        //console.log(data);
     }
     //Angular UI-grid END
 
@@ -1363,7 +1488,7 @@ function ($scope,$rootScope,$http,$filter, Dataset,uiGridConstants, $q, $templat
 
                 $scope.time = response.time;
                 $scope.charts = response.charts;
-                console.log(response);
+                //console.log(response);
             });
         }else{
             $scope.msgwrn ="No data available. Please select other studies or contact RGV support.";
@@ -1412,7 +1537,7 @@ function ($scope,$rootScope,$http,$filter, Dataset,uiGridConstants, $q, $templat
 
     $scope.remove_study = function(study){
         var index = $scope.chosen.indexOf(study);
-        console.log(study)
+        //console.log(study)
         if ( index != -1){
             $scope.chosen.splice(index,1);
         };
@@ -1425,7 +1550,7 @@ function ($scope,$rootScope,$http,$filter, Dataset,uiGridConstants, $q, $templat
                 species_val = speciesDict[i].tax_id;
             }
         }
-        console.log(stud.species)
+        //console.log(stud.species)
         return Dataset.autocomplete({},{'database':database,'search':val,'tax_id':species_val}).$promise.then(function(data){
             return data.map(function(item){
                     return item;
@@ -1453,7 +1578,7 @@ angular.module('rgv').controller('browsergenelevelCtrl',
     
     //Update grid2 en fonction de la selection de la grid1
     $scope.updateSelection = function() {
-        console.log("Update");
+        //console.log("Update");
         $scope.gridApi.grid.refresh();
     };
 
@@ -1504,12 +1629,12 @@ angular.module('rgv').controller('browsergenelevelCtrl',
     $scope.speciesValue = null;
     Dataset.read_file({"name":"genomes"}).$promise.then(function(dataset){
         $scope.species = []
-        console.log(dataset);
+        //console.log(dataset);
         for (var i=0;i<dataset.data.line.length;i++){
             var field = dataset.data.line[i].split('\t');
             $scope.species.push({'name':field[0],'tax_id':field[2].replace(/[\n]/gi, "" )});
         }
-        console.log($scope.species);
+        //console.log($scope.species);
     });
 
     $scope.getTaxID = function(Species,speciesDict){
@@ -1584,7 +1709,7 @@ angular.module('rgv').controller('browsergenelevelCtrl',
             isSelected: true
             }, true);
         $scope.chosen = selectedRows;
-        console.log($scope.chosen);
+        //console.log($scope.chosen);
         $scope.multiFile = selectedRows;
         return true;
     };
@@ -1662,7 +1787,7 @@ angular.module('rgv').controller('browsergenelevelCtrl',
 
                 $scope.time = response.time;
                 $scope.response = response;
-                console.log(response);
+                //console.log(response);
 
 
             });
@@ -1707,7 +1832,7 @@ angular.module('rgv').controller('browsergenelevelCtrl',
 
     $scope.remove_study = function(study){
         var index = $scope.chosen.indexOf(study);
-        console.log(study)
+        //console.log(study)
         if ( index != -1){
             $scope.chosen.splice(index,1);
         };
@@ -1720,7 +1845,7 @@ angular.module('rgv').controller('browsergenelevelCtrl',
                 species_val = speciesDict[i].tax_id;
             }
         }
-        console.log(stud.species)
+        //console.log(stud.species)
         return Dataset.autocomplete({},{'database':database,'search':val,'tax_id':species_val}).$promise.then(function(data){
             return data.map(function(item){
                     return item;
@@ -1774,10 +1899,10 @@ angular.module('rgv').controller('appCtrl',
 
         //Récupération news from local json file
         Dataset.news_feed().$promise.then(function(news){
-    			console.log(news);
+    			//console.log(news);
           if(news.status != 1){
-            $scope.newsfeed = news.data["news_list"].slice(1, 5);
-            console.log($scope.newsfeed);
+            $scope.newsfeed = news.data["news_list"].slice(0, 5);
+            //console.log($scope.newsfeed);
           }
           else {
             $scope.msg = news.msg;
@@ -1812,7 +1937,7 @@ angular.module('rgv').controller('queryCtrl',
 angular.module('rgv').controller('searchCtrl',
     function($scope, $rootScope, $routeParams, $log, $location, $window, User, Auth, SearchHits) {
         var hits = SearchHits.getHits();
-        console.log(hits)
+        //console.log(hits)
         $scope.nb_match = hits.hits.total
         $scope.search_result = hits.hits.hits;
 });
@@ -1852,7 +1977,7 @@ angular.module('rgv').controller('loginCtrl',
       $scope.login = function() {
 
           User.login({},{'user_name': $scope.username, 'user_password': $scope.password}).$promise.then(function(data){
-              console.log($scope.password);
+              //console.log($scope.password);
               if(data.token !== undefined){
                  User.is_authenticated({},{'token': data.token}).$promise.then(function(data){
                      $rootScope.$broadcast('loginCtrl.login', data);
@@ -1875,7 +2000,7 @@ angular.module('rgv').controller('signinCtrl',
         $scope.msg = null;
 
         $scope.register = function(){
-        ////console.log("REGISTER");
+        //////console.log("REGISTER");
           if($scope.register_laboratory === null || $scope.register_laboratory == ''){
               $scope.register_laboratory = 'No laboratory';
           }
