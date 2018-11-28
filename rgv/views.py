@@ -637,16 +637,17 @@ def genelevel(request):
                         #    if float(x) <= q :
                         #        data_chart['x'].append(x)
                         ############################ Remove outliers ###################
-
-                        data_chart['x'].extend(val)
+                        
+                        data_chart['x'].extend(val.astype(np.float))
                         data_chart['name'] = cond
                         data_chart['hoverinfo'] = "all"
                         max_x = max(data_chart['x'])
                         min_x = min(data_chart['x'])
-                        
+
 
                         #Test distribition
                         print len( data_chart['x'])
+                        print (data_chart['x'])
                         if len( data_chart['x']) >= 3 :
                             if max_x != min_x and q3 > 0:
                                 bw = bw_nrd0(data_chart['x'])
@@ -668,7 +669,12 @@ def genelevel(request):
                                 data_chart['y'] = [cond] * len(data_chart['x'])
                                 data_chart['boxmean'] = True
                         else :
-                            chart['msg'] = "No enough data available for %s" % (gene_name)
+                            data_chart['type'] = 'box'
+                            data_chart['orientation'] = "h"
+                            data_chart['boxpoints'] = False
+                            data_chart['y'] = [cond] * len(data_chart['x'])
+                            data_chart['boxmean'] = True
+                            print("No enough data available for %s" % (gene_name))
                             
                         chart['data'].append(data_chart)
                     result[study][gene['Symbol']]['charts'].append(chart)
@@ -1309,15 +1315,18 @@ def scDataGenes(request):
                     
                     data_chart = {}
                     data_chart['x'] = []
+                    print("!!!!!!!!!!!!!!!!!!")
+                    print(val)
                     
                     q3 = np.percentile(val.astype(np.float), 75) #Q3
                   
                     data_chart['x'].extend(val)
                     data_chart['name'] = cond
                     data_chart['hoverinfo'] = "all"
-    
+                    print(data_chart['x']) 
                     max_x = max(data_chart['x'])
                     min_x = min(data_chart['x'])
+                    print(max_x)
                     
 
                     if len( data_chart['x']) > 3 :
@@ -1341,8 +1350,12 @@ def scDataGenes(request):
                             data_chart['y'] = [cond] * len(data_chart['x'])
                             data_chart['boxmean'] = True
                     else :
-                        chart['violmsg'] = "No enough data available for %s" % (gene_name)
-
+                        data_chart['type'] = 'box'
+                        data_chart['orientation'] = "h"
+                        data_chart['boxpoints'] = False
+                        data_chart['y'] = [cond] * len(data_chart['x'])
+                        data_chart['boxmean'] = True
+                        chart['violmsg'] = ""
 
                     chart['violin']['data'].append(data_chart)
                 result['charts'].append(chart)

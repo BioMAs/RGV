@@ -333,7 +333,7 @@ stepnext(1);
                                                     <div class="col-md-4" ></div>
                                                 </div>
                                             <div  ng-if="chart.violmsg != ''" class="alert alert-warning">{{chart.violmsg}}</div>
-                                            <div class="col-md-12" chart-div chart="chart.violin" id="chart-div-violin-{{ $index }}" ng-if='chart.violin && chart.violmsg==""'></div>
+                                            <div class="col-md-12" chart-div chart="chart.violin" id="chart-div-violin-{{ $index }}" ng-if='chart.violin '></div>
                                         </div>                        
                                         <div class="row" ng-if="!chart.violin">
                                             <h4 ng-if="chart.name">{{ chart.name }}</h4>
