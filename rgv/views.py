@@ -643,11 +643,13 @@ def genelevel(request):
                         data_chart['hoverinfo'] = "all"
                         max_x = max(data_chart['x'])
                         min_x = min(data_chart['x'])
-                        bw = bw_nrd0(data_chart['x'])
+                        
 
                         #Test distribition
-                        if len( data_chart['x']) > 3 :
+                        print len( data_chart['x'])
+                        if len( data_chart['x']) >= 3 :
                             if max_x != min_x and q3 > 0:
+                                bw = bw_nrd0(data_chart['x'])
                                 data_chart['type'] = 'violin'
                                 data_chart['points'] = False
                                 data_chart['pointpos'] = 0
@@ -665,7 +667,9 @@ def genelevel(request):
                                 data_chart['boxpoints'] = False
                                 data_chart['y'] = [cond] * len(data_chart['x'])
                                 data_chart['boxmean'] = True
-                        
+                        else :
+                            chart['msg'] = "No enough data available for %s" % (gene_name)
+                            
                         chart['data'].append(data_chart)
                     result[study][gene['Symbol']]['charts'].append(chart)
                 else :
@@ -1314,10 +1318,11 @@ def scDataGenes(request):
     
                     max_x = max(data_chart['x'])
                     min_x = min(data_chart['x'])
-                    bw = bw_nrd0(data_chart['x'])
+                    
 
                     if len( data_chart['x']) > 3 :
                         if max_x != min_x and q3 > 0:
+                            bw = bw_nrd0(data_chart['x'])
                             data_chart['type'] = 'violin'
                             data_chart['points'] = False
                             data_chart['pointpos'] = 0
@@ -1335,6 +1340,8 @@ def scDataGenes(request):
                             data_chart['boxpoints'] = False
                             data_chart['y'] = [cond] * len(data_chart['x'])
                             data_chart['boxmean'] = True
+                    else :
+                        chart['msg'] = "No enough data available for %s" % (gene_name)
 
 
                     chart['violin']['data'].append(data_chart)
