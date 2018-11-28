@@ -1341,7 +1341,7 @@ def scDataGenes(request):
                             data_chart['y'] = [cond] * len(data_chart['x'])
                             data_chart['boxmean'] = True
                     else :
-                        chart['msg'] = "No enough data available for %s" % (gene_name)
+                        chart['violmsg'] = "No enough data available for %s" % (gene_name)
 
 
                     chart['violin']['data'].append(data_chart)
