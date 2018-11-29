@@ -1329,8 +1329,8 @@ def scDataGenes(request):
                     print(max_x)
                     
 
-                    if len( data_chart['x']) > 3 :
-                        if max_x != min_x and q3 > 0:
+                    if len( data_chart['x']) > 5 :
+                        if max_x != min_x and q3 > 0 and len( data_chart['x']) > 10:
                             bw = bw_nrd0(data_chart['x'])
                             data_chart['type'] = 'violin'
                             data_chart['points'] = False
