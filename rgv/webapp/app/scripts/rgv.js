@@ -495,7 +495,7 @@ angular.module('rgv').directive("chartDiv", function() {
         link: function(scope, element, attrs) {
             scope.$watch(attrs.chartDiv, function(value) {
                 scope.chart.config['modeBarButtons'] = [[{
-                    name: 'Donwload plot as png',
+                    name: 'Download plot as png',
                     icon: Plotly.Icons.camera,
                     click: function (gd) {
                       Plotly.downloadImage(gd, {
@@ -528,28 +528,47 @@ function ($scope,$rootScope,$http,$filter,Auth, Dataset,uiGridConstants,$resourc
 
     $scope.lastgenes={};
     $scope.val_button = {};
+    $scope.display_genes = {};
     $scope.displayGeneExp = function(selected_lst,selected_class,selected_gene,model,stud){
-        
 
-
-        if (selected_gene.display == true) {
-            $scope.msg = [];
-            var directory_list = [];
-            var genes_list = {};
-            for (var i=0;i<selected_lst.length;i++){
-                if (selected_lst[i].path !=null){
-                    directory_list.push(selected_lst[i].path);
-                }else{
-                    $scope.msg.push(" No data available for study: "+selected_lst[i].Study+';');
-                }
+        //console.log(Object.keys($scope.display_genes).length)
+        $scope.msg = [];
+        var directory_list = [];
+        var genes_list = {};
+        for (var i=0;i<selected_lst.length;i++){
+            if (selected_lst[i].path !=null){
+                directory_list.push(selected_lst[i].path);
+            }else{
+                $scope.msg.push(" No data available for study: "+selected_lst[i].Study+';');
             }
+        }
+
+        var studList = [];
+        if (selected_gene.GeneID !=null){
+            $scope.lastgenes[selected_gene['stud_name']] = selected_gene;
+            for(var stud in $scope.lastgenes){
+                studList.push(stud);
+                genes_list[$scope.lastgenes[stud].GeneID] = {'ensembl':$scope.lastgenes[stud].EnsemblID,'symbol':$scope.lastgenes[stud].Symbol,'study':stud};
+                var key = $scope.lastgenes[stud].GeneID+"$"+stud;
+                var checkBox = document.getElementById("select-"+$scope.lastgenes[stud].Symbol);
+                if (key in $scope.display_genes){
+                    delete $scope.display_genes[key];
+                    checkBox.checked = false;
+                    $scope.val_button[stud][selected_gene.Symbol] = false;
+                } else {
+                    $scope.display_genes[key] = genes_list;
+                    $scope.val_button[stud][selected_gene.Symbol] = true;
+                }
+                
+            }
+        }
+
+        if (Object.keys($scope.display_genes).length == 0) {
             if(directory_list.length > 0){
                 //test
 
-                
+                //console.log(directory_list);
                 Dataset.scData({},{'directory':directory_list,'conditions':'scRNA-seq','genes':'','name':'','class':selected_class,'model':model}).$promise.then(function(response){
-                    selected_gene.display = false;
-                    $scope.val_button[stud][selected_gene.Symbol] = "Display";
                     $scope.time = response.time;
                     $scope.charts = response.charts;
                     
@@ -560,38 +579,16 @@ function ($scope,$rootScope,$http,$filter,Auth, Dataset,uiGridConstants,$resourc
             }
         }
         else {
-            $scope.msg = [];
-            var directory_list = [];
-            var genes_list = {};
-            for (var i=0;i<selected_lst.length;i++){
-                if (selected_lst[i].path !=null){
-                    directory_list.push(selected_lst[i].path);
-                }else{
-                    $scope.msg.push(" No data available for study: "+selected_lst[i].Study+';');
-                }
-            }
-            var studList = [];
-            if (selected_gene.GeneID !=null){
-                $scope.lastgenes[selected_gene['stud_name']] = selected_gene;
-                for(var stud in $scope.lastgenes){
-                    studList.push(stud);
-                    genes_list[$scope.lastgenes[stud].GeneID] = {'ensembl':$scope.lastgenes[stud].EnsemblID,'symbol':$scope.lastgenes[stud].Symbol,'study':stud};
-                }
-            }
-
             if(directory_list.length > 0){
-                
-                Dataset.scDataGenes({},{'directory':directory_list,'conditions':'scRNA-seq','genes':genes_list,'class':selected_class,'model':model,'studies':studList}).$promise.then(function(response){
-                    for (var x in $scope.val_button[stud]){
-                        $scope.val_button[stud][x] = "Display"
-                    }
-                    selected_gene.display = true;
-                    $scope.val_button[stud][selected_gene.Symbol] = "Hide";
-                    
+                //console.log(directory_list);
+                //console.log(genes_list);
+                //console.log($scope.display_genes);
+                Dataset.scDataGenes({},{'directory':directory_list,'conditions':'scRNA-seq','genes':$scope.display_genes,'class':selected_class,'model':model,'studies':studList}).$promise.then(function(response){
+   
                     $scope.time = response.time;
                     $scope.charts = response.charts;
                     
-                    //console.log(response);
+                    console.log(response);
                 });
 
             }
@@ -687,6 +684,7 @@ function ($scope,$rootScope,$http,$filter,Auth, Dataset,uiGridConstants,$resourc
             $scope.data_all = value.data;
             $scope.ome = value.ome;
             $scope.allspe = value.species;
+            $scope.pmids = value.pmid;
             $scope.techno = value.technology;
             $scope.sex = value.sex;
             $scope.experimentaldesign = value.experimental_design;
@@ -716,6 +714,7 @@ function ($scope,$rootScope,$http,$filter,Auth, Dataset,uiGridConstants,$resourc
             $scope.ome = value.ome;
             $scope.allspe = value.species;
             $scope.techno = value.technology;
+            $scope.pmids = value.pmid;
             $scope.sex = value.sex;
             $scope.experimentaldesign = value.experimental_design;
             $scope.biotop = value.biological_topics;
@@ -1107,6 +1106,7 @@ function ($scope,$rootScope,$http,$filter,Auth, Dataset,uiGridConstants,$resourc
             
             $scope.data_all = value.data;
             $scope.ome = value.ome;
+            $scope.pmids = value.pmid;
             $scope.allspe = value.species;
             $scope.techno = value.technology;
             $scope.sex = value.sex;
@@ -1135,6 +1135,7 @@ function ($scope,$rootScope,$http,$filter,Auth, Dataset,uiGridConstants,$resourc
 
             $scope.data_all = value.data;
             $scope.ome = value.ome;
+            $scope.pmids = value.pmid;
             $scope.allspe = value.species;
             $scope.techno = value.technology;
             $scope.sex = value.sex;
@@ -1655,6 +1656,7 @@ angular.module('rgv').controller('browsergenelevelCtrl',
         startPromise.then(function(value){
             $scope.data_all = value.data;
             $scope.ome = value.ome;
+            $scope.pmids = value.pmid;
             $scope.allspe = value.species;
             $scope.techno = value.technology;
             $scope.sex = value.sex;
@@ -1681,6 +1683,7 @@ angular.module('rgv').controller('browsergenelevelCtrl',
         startPromise.then(function(value){
             $scope.data_all = value.data;
             $scope.ome = value.ome;
+            $scope.pmids = value.pmid;
             $scope.allspe = value.species;
             $scope.techno = value.technology;
             $scope.sex = value.sex;

@@ -134,6 +134,19 @@ def d_getter(request):
                     l_species.append(i)
     l_species.sort()
 
+    df_PubMedID = df.PubMedID.unique().tolist()
+    l_PubMedID = []
+    for i in df_PubMedID :
+        if '|' in str(i) :
+            for z in i.split('|'):
+                if z not in l_PubMedID :
+                    l_PubMedID.append(z)
+        else :
+            if i not in l_PubMedID:
+                if str(i) != 'nan': 
+                    l_PubMedID.append(i)
+    l_PubMedID.sort()
+
     df_bt = df.biological_topics.unique().tolist()
     l_bt = []
     for i in df_bt :
@@ -171,7 +184,7 @@ def d_getter(request):
             if i not in l_ed:
                 if str(i) != 'nan': 
                     l_ed.append(i)
-    l_ed = l_ed.sort()
+    l_ed.sort()
     
     df_dev = df.developmental_stage.unique().tolist()
     l_dev = []
@@ -444,13 +457,14 @@ def d_getter(request):
         result["chart_bt"] = [chart_techno]
         result["overview"] = {'techno':total_technologies,'topics':total_topics,'samples':sample_number,'studies':total_studies,'species':species_number}
         return result
-    
+    print l_ed
     return {'data':final_df,
             'species':l_species,
             'ome':l_ome,
             'technology':l_technology,
             'sex':l_sex,
             'experimental_design':l_ed,
+            'pmid':l_PubMedID,
             'biological_topics':l_bt,
             'tissue_or_cell':l_tc,
             'developmental_stage':l_dev,
@@ -1173,8 +1187,16 @@ def scDataGenes(request):
     form = json.loads(request.body, encoding=request.charset)
     directories = form['directory']
 
-    all_genes = form['genes']
-    selected_genes = all_genes.keys()
+
+    all_= form['genes']
+    all_genes = {}
+    selected_genes =[]
+    for i in all_ :
+        print all_[i]
+        for j in all_[i]:
+            all_genes[j] = all_[i][j]
+            selected_genes.append(j)
+    
     ensemblgenes = []
     for i in all_genes :
         ensemblgenes.append(all_genes[i]['ensembl'])
@@ -1304,7 +1326,7 @@ def scDataGenes(request):
                 else :
                     chart['violin']['layout'] = {'height': 600,'showlegend': False,"title":'','margin':{'l':300,},'yaxis':{'tickfont':10},'hovermode': 'closest'}
                 chart['violin']['gene'] = gene_name
-                chart['violin']['msg'] = ""
+                chart['violmsg'] = ""
                 chart['violin']['study'] = stud
 
                 for cond in uniq_groups :
@@ -1315,18 +1337,18 @@ def scDataGenes(request):
                     
                     data_chart = {}
                     data_chart['x'] = []
-                    print("!!!!!!!!!!!!!!!!!!")
-                    print(val)
+                    #print("!!!!!!!!!!!!!!!!!!")
+                    #print(val)
                     
                     q3 = np.percentile(val.astype(np.float), 75) #Q3
                   
                     data_chart['x'].extend(val)
                     data_chart['name'] = cond
                     data_chart['hoverinfo'] = "all"
-                    print(data_chart['x']) 
+                    #print(data_chart['x']) 
                     max_x = max(data_chart['x'])
                     min_x = min(data_chart['x'])
-                    print(max_x)
+                    #print(max_x)
                     
 
                     if len( data_chart['x']) > 5 :

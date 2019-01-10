@@ -115,6 +115,7 @@ stepnext(1);
                   <thead>
                     <tr>
                       <th st-sort-default="true" st-sort="article">Article</th>
+                      <th st-sort="pmid">PMID</th>
                       <th st-sort="ome">Ome</th>
                       <th st-sort="technology">Technology</th>
                       <th st-sort="species">Species</th>
@@ -132,6 +133,12 @@ stepnext(1);
                     <tr>
                         <th>
                           <input st-search="article" placeholder="Article" class="input-sm form-control" type="search"/>
+                        </th>
+                        <th>
+                            <select st-search="pmid" class="form-control">
+                                <option value="">All</option>
+                                <option ng-repeat="pmd in pmids" value="{{pmd}}">{{pmd}}</option>
+                            </select>
                         </th>
                         <th>
                             <select st-search="ome" class="form-control">
@@ -217,6 +224,7 @@ stepnext(1);
                   <tbody>
                     <tr st-select-row="row" st-select-mode="multiple" ng-repeat="row in displayedCollection" ng-if="row.path && (row.technology == 'scRNA-Seq' || row.technology == 'Microwell-Seq') " >
                       <td>{{row.article}}</td>
+                      <td>{{row.PubMedID}}</td>
                       <td>{{row.ome}}</td>
                       <td>{{row.technology}}</td>
                       <td>{{replaceString(row.species)}}</td>

@@ -105,6 +105,7 @@ stepnext(1);
                   <thead>
                     <tr>
                       <th st-sort-default="true" st-sort="article">Article</th>
+                      <th st-sort="pmid">PMID</th>
                       <th st-sort="ome">Ome</th>
                       <th st-sort="technology">Technology</th>
                       <th st-sort="species">Species</th>
@@ -122,6 +123,12 @@ stepnext(1);
                     <tr>
                         <th>
                           <input st-search="article" placeholder="Article" class="input-sm form-control" type="search"/>
+                        </th>
+                        <th>
+                            <select st-search="pmid" class="form-control">
+                                <option value="">All</option>
+                                <option ng-repeat="pmd in pmids" value="{{pmd}}">{{pmd}}</option>
+                            </select>
                         </th>
                         <th>
                             <select st-search="ome" class="form-control">
@@ -207,6 +214,7 @@ stepnext(1);
                   <tbody>
                     <tr st-select-row="row" st-select-mode="multiple" ng-repeat="row in displayedCollection" ng-if="row.path" >
                       <td>{{row.article}}</td>
+                      <td>{{row.PubMedID}}</td>
                       <td>{{row.ome}}</td>
                       <td>{{row.technology}}</td>
                       <td>{{replaceString(row.species)}}</td>
@@ -298,20 +306,21 @@ stepnext(1);
                                         </span>
                                         </div>
                                     </form>
+                                </div>
+                                <div class="row">
                                     <div class="list-group" >
-                                        <div class="list-group-item" ng-repeat="gene in allgenes[stud.path]" style="margin-bottom:10px">
-                                            <a ng-click="remove_genes(gene,stud.path)"><i class="fas fa-times panel-close" style="color: white; text-decoration: none;background:#d80606;"></i></a>
-                                            <div class="pull-left form-control-inline">
-                                            <h4 class="list-group-item-heading">{{ gene.Symbol }}</h4>
-                                            <p class="list-group-item-text">EntrezGene ID: {{ gene.GeneID }}</p>
-                                            <p class="list-group-item-text">Ensembl ID: {{ gene.EnsemblID }}</p>
+                                            <div class="list-group-item col-md-3" ng-repeat="gene in allgenes[stud.path]" style="margin-bottom:10px">
+                                                <a ng-click="remove_genes(gene,stud.path)"><i class="fas fa-times panel-close" style="color: white; text-decoration: none;background:#d80606;"></i></a>
+                                                <div class="pull-left form-control-inline">
+                                                <h4 class="list-group-item-heading">{{ gene.Symbol }}</h4>
+                                                <p class="list-group-item-text">EntrezGene ID: {{ gene.GeneID }}</p>
+                                                <p class="list-group-item-text">Ensembl ID: {{ gene.EnsemblID }}</p>
+                                                </div>
+                                                <input type="checkbox" id="select-{{ gene.Symbol }}" ng-model="val_button[stud][gene.Symbol]" ng-change="displayGeneExp(chosen,'',gene,models,stud.path)">
+                                                <div class="clearfix" ></div>
+                                                
                                             </div>
-                                            <button id="displayBtn-{{ gene.Symbol }}-{{ stud.path }}" class="btn btn-default pull-right"  ng-click="displayGeneExp(chosen,'',gene,models,stud.path)">{{val_button[stud.path][gene.Symbol]}}</button>	
-                                            <div class="clearfix" ></div>
-                                            
                                         </div>
-                                    </div>
-                
                                 </div>
                                 <div class="row">
                                     <div class="col-md-12">
