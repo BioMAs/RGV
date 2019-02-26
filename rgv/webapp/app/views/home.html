@@ -226,13 +226,7 @@
             Latest news
         </div>
         <div class="panel-body fixed-panel">
-          <div ng-repeat="(key,value) in newsfeed">
-            <h4>{{value.title}}</h4>
-            <span ng-if="value.category == 'Study'">More information: <a href="https://www.ncbi.nlm.nih.gov/pubmed/{{value.text}}" target="blank">Pubmed</a></span>
-            <span ng-if="value.category != 'Study'">{{value.text}}</span>
-            <hr>
-
-          </div>
+			<a class="twitter-timeline" href="https://twitter.com/ReproGenoViewer?ref_src=twsrc%5Etfw">Tweets by ReproGenoViewer</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
         </div>
     </div>

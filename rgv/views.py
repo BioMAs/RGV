@@ -67,6 +67,8 @@ steam_handler = logging.StreamHandler()
 steam_handler.setLevel(logging.DEBUG)
 logger.addHandler(steam_handler)
 
+
+
 @view_config(route_name='read_file', renderer='json', request_method='POST')
 def read_file(request):
     form = json.loads(request.body, encoding=request.charset)
@@ -108,6 +110,7 @@ def d_getter(request):
     form = json.loads(request.body, encoding=request.charset)
     file_name = form['name']
     user = "none"
+
     if "user" in form :
         user = form['user']
     if user != "none" :
@@ -669,7 +672,7 @@ def genelevel(request):
                                 data_chart['points'] = False
                                 data_chart['pointpos'] = 0
                                 data_chart['jitter'] = 0.85
-                                data_chart['bandwidth'] = bw
+                                #data_chart['bandwidth'] = bw
                                 data_chart['scalemode'] = "count"
                                 data_chart['spanmode'] = "hard"
                                 data_chart['orientation'] = 'h'
@@ -1358,8 +1361,8 @@ def scDataGenes(request):
                             data_chart['points'] = False
                             data_chart['pointpos'] = 0
                             data_chart['jitter'] = 0.85
-                            data_chart['bandwidth'] = bw
-                            data_chart['scalemode'] = "count"
+                            #data_chart['bandwidth'] = bw
+                            data_chart['scalemode'] = "width"
                             data_chart['spanmode'] = "hard"
                             data_chart['orientation'] = 'h'
                             data_chart['box'] = {'visible': True}
