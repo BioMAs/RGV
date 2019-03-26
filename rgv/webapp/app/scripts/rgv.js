@@ -1891,10 +1891,28 @@ angular.module('rgv').controller('browsergenelevelCtrl',
 
 // Contrôleur de base associé à home.html
 angular.module('rgv').controller('appCtrl',
-    function ($scope,$rootScope, $log, Auth, User, Dataset, $cookieStore, $location) {
+    function ($scope,$rootScope, $log, Auth, User, Dataset, $cookieStore, $location,ngDialog) {
         $scope.msg = null;
 
-       
+        $scope.submit = function (obj,txt){
+            console.log(obj);
+            console.log(txt);
+            User.register({'type':"bug",'obj': obj, 'txt': txt}).$promise.then(function(data){
+                    alert(data.msg);
+                    ngDialog.close();
+            });
+        };
+
+        $scope.errorObject = "What is about?";
+        $scope.errorTxt = "Describe here the bug you encountered or the feature you would like to be added...";
+
+        $scope.openDefault = function () {
+            ngDialog.open({
+                template: 'firstDialogId',
+                className: 'ngdialog-theme-default',
+                scope: $scope
+            });
+        };
 
         var user = Auth.getUser();
 

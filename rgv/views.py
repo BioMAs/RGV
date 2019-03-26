@@ -1840,36 +1840,42 @@ def user(request):
 def user_register(request):
     form = json.loads(request.body, encoding=request.charset)
     print form
-    if not form['sra']:
-        return {'type':'danger','value':'Something wrong when sending email. Please contact RGV adminitrators'}
-    
-    
-    message = "%s requested a new study.\n" % (form['user'])
-    message += "Article: " + form['article']+"\n"
-    message += "PMID: " + form['pmid']+"\n"
-    message += "SRA: " + form['sra']+"\n"
-    message += "GSE: " + form['gse']+"\n"
-    message += "PRJ: " + form['prj']+"\n"
 
-    path_to_file = os.path.join(request.registry.studies_path,"requested_studies.txt")
-    requested_pmid = []
-    if os.path.isfile(path_to_file):
-        file_studies_request = open(path_to_file,'r')
-        for study in file_studies_request.readlignes():
-            requested_pmid.append(study.split('\t')[0])
-        file_studies_request.close()
-        file_studies_request = open(path_to_file,'a')
-    else :
-        file_studies_request = open(path_to_file,'a')
-    
-    date = datetime.datetime.now()
-    
-    if form['pmid'] not in requested_pmid :
-        file_studies_request.write( form['pmid'] +"\t"+ form['sra'] +"\t"+ form['gse'] +"\t"+ str(date)+"\n")
+    if "type" not in form :
+        if not form['sra']:
+            return {'type':'danger','value':'Something wrong when sending email. Please contact RGV adminitrators'}
+        
+        
+        message = "%s requested a new study.\n" % (form['user'])
+        message += "Article: " + form['article']+"\n"
+        message += "PMID: " + form['pmid']+"\n"
+        message += "SRA: " + form['sra']+"\n"
+        message += "GSE: " + form['gse']+"\n"
+        message += "PRJ: " + form['prj']+"\n"
 
-    send_mail(request, "frederic.chalmel@inserm.fr", form['obj'], message)
+        path_to_file = os.path.join(request.registry.studies_path,"requested_studies.txt")
+        requested_pmid = []
+        if os.path.isfile(path_to_file):
+            file_studies_request = open(path_to_file,'r')
+            for study in file_studies_request.readlignes():
+                requested_pmid.append(study.split('\t')[0])
+            file_studies_request.close()
+            file_studies_request = open(path_to_file,'a')
+        else :
+            file_studies_request = open(path_to_file,'a')
+        
+        date = datetime.datetime.now()
+        
+        if form['pmid'] not in requested_pmid :
+            file_studies_request.write( form['pmid'] +"\t"+ form['sra'] +"\t"+ form['gse'] +"\t"+ str(date)+"\n")
 
-    return {'type':'success'}
+        send_mail(request, "frederic.chalmel@inserm.fr", form['obj'], message)
+
+        return {'type':'success'}
+    if "type" in form :
+        if form["type"] == "bug":
+            send_mail(request, "reprogenomics.viewer@gmail.com", form['obj'], form['txt'])
+            return {'msg':'Thanks for submitting your bug!We appreciate you taking the time to help us improve our RGV.'}
 
 
 @view_config(route_name='user_confirm_email', renderer='json', request_method='POST')

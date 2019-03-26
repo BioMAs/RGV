@@ -48,6 +48,7 @@ def main(global_config, **settings):
     config.registry.studies_path = settings['studies_path']
     config.registry.jbrowse_path = settings['jbrowse_path']
     config.registry.base_url = settings['base_url']
+    
 
 
     # by default we don't sniff, ever
