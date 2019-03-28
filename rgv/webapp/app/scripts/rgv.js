@@ -1315,6 +1315,15 @@ function ($scope,$rootScope,$http,$filter,Auth, Dataset,uiGridConstants,$resourc
         if ( index != -1){
             $scope.allgenes[stud].splice(index,1);                              
         };
+        console.log($scope.display_genes)
+        
+        var name = gene.GeneID+'$'+stud;
+        console.log($scope.display_genes[name])
+        console.log(name);
+        if(gene.GeneID+'$'+stud in $scope.display_genes){
+            delete $scope.display_genes[gene.GeneID+'$'+stud]; 
+        }
+        console.log($scope.display_genes)
     }
 
     $scope.remove_study = function(study){
