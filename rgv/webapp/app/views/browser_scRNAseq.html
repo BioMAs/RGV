@@ -342,7 +342,10 @@ stepnext(1);
                                                 </div>
                                                  <div class="col-md-4" ></div>
                                             </div>
-                                            
+                                            <div class="row">
+                                                <div ng-if="chart.violmsg != ''" class="alert alert-warning">{{chart.violmsg}}</div>
+                                                <div class="col-md-12" chart-div chart="chart.violin" id="chart-div-violin-{{ $index }}"></div>
+                                            </div>
                                         </div>                        
                                         <div class="row" ng-if="!chart.violin">
                                             <h4 ng-if="chart.name">{{ chart.name }}</h4>
@@ -351,10 +354,6 @@ stepnext(1);
                                         </div>                            
                                     </div>
 
-                                </div>
-                                <div class="row">
-                                    <div ng-if="chart.violmsg != ''" class="alert alert-warning">{{chart.violmsg}}</div>
-                                    <div class="col-md-12" chart-div chart="chart.violin" id="chart-div-violin-{{ $index }}"></div>
                                 </div>       
                             </div>
                           
