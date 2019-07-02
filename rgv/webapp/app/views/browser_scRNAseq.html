@@ -74,10 +74,10 @@ stepnext(1);
     <div class="stepwizard">
       <div class="stepwizard-row">
         <div class="stepwizard-step">
-            <a class="btn btn-default btn-circle active-step" onclick="stepnext(1);" href="#step-1" target="_self" data-toggle="tab" onclick="stepnext(1)" >1</a>
+            <a class="btn btn-default btn-circle active-step" href="#step-1" target="_self" data-toggle="tab" onclick="stepnext(1)" >1</a>
         </div>
         <div class="stepwizard-step">
-            <a class="btn btn-default btn-circle" onclick="stepnext(2);" href="#step-2" target="_self" data-toggle="tab">2</a>
+            <a class="btn btn-default btn-circle disabled" onclick="stepnext(2);" disabled href="#step-2" target="_self" data-toggle="tab">2</a>
         </div>
         <div class="stepwizard-step">
                 <a class="btn btn-default btn-circle disabled" disabled href="#step-3" target="_self" data-toggle="tab">3</a>
@@ -272,7 +272,7 @@ stepnext(1);
                         </tr>
                     </table>
                 </div>
-                <button class="btn btn-default" ng-click="showData(chosen,'',models)" onclick="stepnext(3);">Show</button>
+                <button class="btn btn-default" ng-click="showData(chosen,'',models,'')" onclick="stepnext(3);">Show</button>
           </div>
           
           <!-- STEP 4 -->
@@ -291,10 +291,11 @@ stepnext(1);
                     </ul>
                     <div class="tab-content">
                       <div ng-repeat="stud in chosen" class="tab-pane" ng-class="{active:$index==0}" id="tab_default-{{ $index }}">
+                      
                         <div class="row" ng-repeat="chart in charts" ng-if="chart.dir == stud.path || chart.title == 'violin'">
                             <div class="row">
                                 <div class="col-md-8">
-                                    <select style="font-size: 14px;" id="select-{{ $index }}" class="form-control" ng-model="models[stud.path]" ng-init="models[stud.path] = chart.selected" ng-change="showData(chosen,'',models)" ng-options="class for class in chart.class"></select>
+                                    <select style="font-size: 14px;" id="select-{{ $index }}" class="form-control" ng-model="models[stud.path]" ng-init="models[stud.path] = chart.selected" ng-change="showData(chosen,'',models,display_genes)" ng-options="class for class in chart.class"></select>
                                 </div>
                                 <div class="col-md-4">
                                     <form >
@@ -310,13 +311,13 @@ stepnext(1);
                                 <div class="row">
                                     <div class="list-group" >
                                             <div class="list-group-item col-md-3" ng-repeat="gene in allgenes[stud.path]" style="margin-bottom:10px">
-                                                <a ng-click="remove_genes(gene,stud.path)"><i class="fas fa-times panel-close" style="color: white; text-decoration: none;background:#d80606;"></i></a>
+                                                <a ng-click="remove_genes(gene,stud.path,chosen,'',models,'')"><i class="fas fa-times panel-close" style="color: white; text-decoration: none;background:#d80606;"></i></a>
                                                 <div class="pull-left form-control-inline">
                                                 <h4 class="list-group-item-heading">{{ gene.Symbol }}</h4>
                                                 <p class="list-group-item-text">EntrezGene ID: {{ gene.GeneID }}</p>
                                                 <p class="list-group-item-text">Ensembl ID: {{ gene.EnsemblID }}</p>
                                                 </div>
-                                                <input type="checkbox" id="select-{{ gene.Symbol }}" ng-model="val_button[stud][gene.Symbol]" ng-change="displayGeneExp(chosen,'',gene,models,stud.path)">
+                                                <input type="checkbox" id="select-{{ gene.GeneID }}-{{ stud.path }}" ng-model="val_button[stud.path][gene.GeneID]" ng-change="displayGeneExp(chosen,'',gene,models,stud.path)">
                                                 <div class="clearfix" ></div>
                                                 
                                             </div>
@@ -334,23 +335,26 @@ stepnext(1);
                                                 <div class="col-md-4" ></div>
                                             </div>
                                             <div class="row">
-                                                    <div class="col-md-4"></div>
-                                                    <div class="col-md-4">
-                                                        <span class="pull-left">{{chart.minval}}</span>
-                                                        <span class="pull-right">{{chart.maxval}}</span>
-                                                    </div>
-                                                    <div class="col-md-4" ></div>
+                                                <div class="col-md-4"></div>
+                                                <div class="col-md-4">
+                                                    <span class="pull-left">{{chart.minval}}</span>
+                                                    <span class="pull-right">{{chart.maxval}}</span>
                                                 </div>
-                                            <div  ng-if="chart.violmsg != ''" class="alert alert-warning">{{chart.violmsg}}</div>
-                                            <div class="col-md-12" chart-div chart="chart.violin" id="chart-div-violin-{{ $index }}" ng-if='chart.violin '></div>
+                                                 <div class="col-md-4" ></div>
+                                            </div>
+                                            
                                         </div>                        
                                         <div class="row" ng-if="!chart.violin">
                                             <h4 ng-if="chart.name">{{ chart.name }}</h4>
                                             <div  ng-if="chart.msg != ''" class="alert alert-warning">{{chart.msg}}</div>
-                                            <div chart-div chart="chart" id="chart-div-{{ $index }}" ng-if='chart.msg==""'></div> 
+                                            <div chart-div chart="chart" id="chart-div-{{ $index }}" ng-if='chart.msg==""'></div>
                                         </div>                            
                                     </div>
 
+                                </div>
+                                <div class="row">
+                                    <div ng-if="chart.violmsg != ''" class="alert alert-warning">{{chart.violmsg}}</div>
+                                    <div class="col-md-12" chart-div chart="chart.violin" id="chart-div-violin-{{ $index }}"></div>
                                 </div>       
                             </div>
                           

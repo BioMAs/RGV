@@ -277,7 +277,7 @@ stepnext(1);
                     <div class="tab-content">
                       <div ng-repeat="stud in chosen" class="tab-pane" ng-class="{active:$index==0}" id="tab_default-{{ $index }}">
                         <div class="row">
-                          <div class="col-md-6">
+                            <div class="col-md-4">
                               <form >
                                 <div class="input-group" style="margin-bottom:15px;">
                                   <input style="z-index: 0;font-size: 14px;height:34px;" class="form-control" name="states" id="states" type="text" placeholder="Select genes" ng-model="selectedgene"  typeahead-min-length="2" typeahead="item.Symbol for item in get_genes($viewValue,'genes',stud,species)" typeahead-on-select="get_item($item, $model,label)" typeahead-loading="Loading" autocomplete="off">
@@ -287,22 +287,23 @@ stepnext(1);
                                   </span>
                                 </div>
                               </form>
-                          </div>
-                          <div class="col-md-6">
-                              <div class="list-group" >
-                                  <div class="list-group-item" ng-repeat="gene in allgenes[stud.path]" style="margin-bottom:10px">
-                                    <a ng-click="remove_genes(gene,stud.path)"><i class="fas fa-times panel-close" style="color: white; text-decoration: none;background:#d80606;"></i></a>
-                                    <div class="pull-left form-control-inline">
-                                      <h4 class="list-group-item-heading">{{ gene.Symbol }}</h4>
-                                      <p class="list-group-item-text">EntrezGene ID: {{ gene.GeneID }}</p>
-                                      <p class="list-group-item-text">Ensembl ID: {{ gene.EnsemblID }}</p>
-                                    </div>
-                                    <div class="clearfix" ></div>
-                                    
-                                  </div>
-                              </div>
-                              <button id="displayBtn" class="btn btn-default pull-right"  ng-click="showData(chosen,'',allgenes,models)" ng-if="allgenes[stud.path].length > 0" style="margin-bottom:10px">Display</button>	
                             </div>
+                        </div>
+                        <div class="row">
+                            <div class="list-group" >
+                                <div class="list-group-item col-md-3" ng-repeat="gene in allgenes[stud.path]" style="margin-bottom:10px">
+                                  <a ng-click="remove_genes(gene,stud.path)"><i class="fas fa-times panel-close" style="color: white; text-decoration: none;background:#d80606;"></i></a>
+                                  <div class="pull-left form-control-inline">
+                                    <h4 class="list-group-item-heading">{{ gene.Symbol }}</h4>
+                                    <p class="list-group-item-text">EntrezGene ID: {{ gene.GeneID }}</p>
+                                    <p class="list-group-item-text">Ensembl ID: {{ gene.EnsemblID }}</p>
+                                  </div>
+                                  <div class="clearfix" ></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                          <button id="displayBtn" class="btn btn-default pull-right"  ng-click="showData(chosen,'',allgenes,models)" ng-if="allgenes[stud.path].length > 0" style="margin-bottom:10px">Display</button>	
                         </div>
                         <hr>
                         <div class="row" ng-repeat="(key,val) in response" ng-if="key == stud.path">

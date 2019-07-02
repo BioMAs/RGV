@@ -1190,14 +1190,13 @@ def scDataGenes(request):
     form = json.loads(request.body, encoding=request.charset)
     directories = form['directory']
 
-
     all_= form['genes']
     all_genes = {}
     selected_genes =[]
     for i in all_ :
-        print all_[i]
         for j in all_[i]:
-            all_genes[j] = all_[i][j]
+            name = i+"$"+j
+            all_genes[name] = all_[i][j]
             selected_genes.append(j)
     
     ensemblgenes = []
@@ -1240,150 +1239,155 @@ def scDataGenes(request):
 
         #For selected gene
         for i in range(0,len(selected_genes)):
-            if all_genes[selected_genes[i]]['study'] == stud :
-                gene_name = all_genes[selected_genes[i]]['symbol']
-                chart['config']={'displaylogo':False,'modeBarButtonsToRemove':['toImage','zoom2d','pan2d','lasso2d','resetScale2d']}
-                chart['data']=[]
-                chart['description'] = ""
-                chart['name'] = "Expression of: %s " % (gene_name)
-                chart['title'] = ""
-                chart['dir'] = stud
-                chart['selected'] = selected_class
-                chart['layout'] = {'width':1180 ,'height':800,'yaxis':{'autorange': True,'showgrid': False,'showticklabels': False,'zeroline': True,'showline': False,'autotick': True},'xaxis':{'showticklabels': False,'autorange': True,'showgrid': False,'zeroline': True,'showline': False,'autotick': True},'autoexpand': True,'showlegend': False, 'legend': {'yanchor':'bottom','orientation':'h','traceorder':'reversed'},"title":'', 'hovermode': 'closest'}
-                chart['gene'] = gene_name
-                chart['msg'] = ""
-                chart['study'] = stud
+            if stud+"$"+selected_genes[i] in all_genes and all_genes[stud+"$"+selected_genes[i]]['study'] == stud :
+                if "continue" in all_genes[stud+"$"+selected_genes[i]] :
+                    continue
+                else: 
+                    all_genes[stud+"$"+selected_genes[i]]["continue"] = True
+                    print all_genes[stud+"$"+selected_genes[i]]['study']
+                    gene_name = all_genes[stud+"$"+selected_genes[i]]['symbol']
+                    chart['config']={'displaylogo':False,'modeBarButtonsToRemove':['toImage','zoom2d','pan2d','lasso2d','resetScale2d']}
+                    chart['data']=[]
+                    chart['description'] = ""
+                    chart['name'] = "Expression of: %s " % (gene_name)
+                    chart['title'] = ""
+                    chart['dir'] = stud
+                    chart['selected'] = selected_class
+                    chart['layout'] = {'width':1180 ,'height':800,'yaxis':{'autorange': True,'showgrid': False,'showticklabels': False,'zeroline': True,'showline': False,'autotick': True},'xaxis':{'showticklabels': False,'autorange': True,'showgrid': False,'zeroline': True,'showline': False,'autotick': True},'autoexpand': True,'showlegend': False, 'legend': {'yanchor':'bottom','orientation':'h','traceorder':'reversed'},"title":'', 'hovermode': 'closest'}
+                    chart['gene'] = gene_name
+                    chart['msg'] = ""
+                    chart['study'] = stud
 
-                max_val = 0
-                min_val = 0
-                #EntrezGenes
-                val_gene = np.array(genes[str(selected_genes[i])])
-                val_gene = val_gene.astype(np.float)
-                if len(val_gene) != 0 :
-                    max_val =  np.max(val_gene.astype(np.float))
-                    min_val =  np.min(val_gene.astype(np.float))
-
-                #Ensembl IDs
-                val_gene_ensembl = np.array(ensembl_genes[all_genes[selected_genes[i]]['ensembl']])
-                if len(val_gene_ensembl) != 0 :
-                    max_val =  np.max(val_gene_ensembl.astype(np.float))
-                    min_val =  np.min(val_gene_ensembl.astype(np.float))
-
-                chart['maxval'] = int(round(max_val))
-                chart['minval'] = int(round(min_val))
-
-                #Add condition information according selected the class
-                for cond in uniq_groups :
+                    max_val = 0
+                    min_val = 0
+                    #EntrezGenes
+                    val_gene = np.array(genes[str(selected_genes[i])])
+                    val_gene = val_gene.astype(np.float)
                     if len(val_gene) != 0 :
-                        val = val_gene[np.where(groups == cond)[0]]
-                        val_x= x[np.where(groups == cond)[0]]
-                        val_y= y[np.where(groups == cond)[0]]
-                        text = samples[np.where(groups == cond)[0]]
-                        data_chart = {}
-                        data_chart['type'] = 'scattergl'
-                        data_chart['mode']= 'markers'
-                        data_chart['text'] = []
-                        data_chart['text'].extend(text)
-                        data_chart['x'] = []
-                        data_chart['x'].extend(val_x)
-                        data_chart['y'] = []
-                        data_chart['y'].extend(val_y)
-                        data_chart['name'] = cond
-                        data_chart['hoverinfo'] = "all"
-                        data_chart['marker']={'color':[],'cmax':max_val,'cmin':min_val}
-                        data_chart['marker']['color'].extend(val)
-                        chart['data'].append(data_chart)
-                    elif len(val_gene_ensembl) != 0 :
-                        val = val_gene_ensembl[np.where(groups == cond)[0]]
-                        val_x= x[np.where(groups == cond)[0]]
-                        val_y= y[np.where(groups == cond)[0]]
-                        text = samples[np.where(groups == cond)[0]]
-                        data_chart = {}
-                        data_chart['type'] = 'scattergl'
-                        data_chart['mode']= 'markers'
-                        data_chart['text'] = []
-                        data_chart['text'].extend(text)
-                        data_chart['x'] = []
-                        data_chart['x'].extend(val_x)
-                        data_chart['y'] = []
-                        data_chart['y'].extend(val_y)
-                        data_chart['name'] = cond
-                        data_chart['hoverinfo'] = "all"
-                        data_chart['marker']={'color':[],'cmax':max_val,'cmin':min_val}
-                        data_chart['marker']['color'].extend(val)
-                        chart['data'].append(data_chart)
+                        max_val =  np.max(val_gene.astype(np.float))
+                        min_val =  np.min(val_gene.astype(np.float))
+
+                    #Ensembl IDs
+                    val_gene_ensembl = np.array(ensembl_genes[all_genes[stud+"$"+selected_genes[i]]['ensembl']])
+                    if len(val_gene_ensembl) != 0 :
+                        max_val =  np.max(val_gene_ensembl.astype(np.float))
+                        min_val =  np.min(val_gene_ensembl.astype(np.float))
+
+                    chart['maxval'] = int(round(max_val))
+                    chart['minval'] = int(round(min_val))
+
+                    #Add condition information according selected the class
+                    for cond in uniq_groups :
+                        if len(val_gene) != 0 :
+                            val = val_gene[np.where(groups == cond)[0]]
+                            val_x= x[np.where(groups == cond)[0]]
+                            val_y= y[np.where(groups == cond)[0]]
+                            text = samples[np.where(groups == cond)[0]]
+                            data_chart = {}
+                            data_chart['type'] = 'scattergl'
+                            data_chart['mode']= 'markers'
+                            data_chart['text'] = []
+                            data_chart['text'].extend(text)
+                            data_chart['x'] = []
+                            data_chart['x'].extend(val_x)
+                            data_chart['y'] = []
+                            data_chart['y'].extend(val_y)
+                            data_chart['name'] = cond
+                            data_chart['hoverinfo'] = "all"
+                            data_chart['marker']={'color':[],'cmax':max_val,'cmin':min_val}
+                            data_chart['marker']['color'].extend(val)
+                            chart['data'].append(data_chart)
+                        elif len(val_gene_ensembl) != 0 :
+                            val = val_gene_ensembl[np.where(groups == cond)[0]]
+                            val_x= x[np.where(groups == cond)[0]]
+                            val_y= y[np.where(groups == cond)[0]]
+                            text = samples[np.where(groups == cond)[0]]
+                            data_chart = {}
+                            data_chart['type'] = 'scattergl'
+                            data_chart['mode']= 'markers'
+                            data_chart['text'] = []
+                            data_chart['text'].extend(text)
+                            data_chart['x'] = []
+                            data_chart['x'].extend(val_x)
+                            data_chart['y'] = []
+                            data_chart['y'].extend(val_y)
+                            data_chart['name'] = cond
+                            data_chart['hoverinfo'] = "all"
+                            data_chart['marker']={'color':[],'cmax':max_val,'cmin':min_val}
+                            data_chart['marker']['color'].extend(val)
+                            chart['data'].append(data_chart)
+                        else :
+                            chart['msg'] = "No data available for %s gene" % (gene_name)
+
+                    #ADD VIOLIN PLOT FOR GENE
+                    chart['violin'] = {}
+                    gene_name = all_genes[stud+"$"+selected_genes[i]]['symbol']
+                    chart['violin']['config']={'displaylogo':False,'modeBarButtonsToRemove':['toImage','zoom2d','pan2d','lasso2d','resetScale2d']}
+                    chart['violin']['data']=[]
+                    chart['violin']['description'] = ""
+                    chart['violin']['name'] = "Violin plot of: %s " % (gene_name)
+                    chart['violin']['title'] = "violin"
+                    chart['violin']['selected'] = selected_class
+                    if len(uniq_groups) > 25 :
+                        chart['violin']['layout'] = {'height': 1000,'showlegend': False,'margin':{'l':300,},'yaxis':{'tickfont':10},'hovermode': 'closest'}
                     else :
-                        chart['msg'] = "No data available for %s gene" % (gene_name)
+                        chart['violin']['layout'] = {'height': 600,'showlegend': False,"title":'','margin':{'l':300,},'yaxis':{'tickfont':10},'hovermode': 'closest'}
+                    chart['violin']['gene'] = gene_name
+                    chart['violmsg'] = ""
+                    chart['violin']['study'] = stud
 
-                #ADD VIOLIN PLOT FOR GENE
-                chart['violin'] = {}
-                gene_name = all_genes[selected_genes[i]]['symbol']
-                chart['violin']['config']={'displaylogo':False,'modeBarButtonsToRemove':['toImage','zoom2d','pan2d','lasso2d','resetScale2d']}
-                chart['violin']['data']=[]
-                chart['violin']['description'] = ""
-                chart['violin']['name'] = "Violin plot of: %s " % (gene_name)
-                chart['violin']['title'] = "violin"
-                chart['violin']['selected'] = selected_class
-                if len(uniq_groups) > 25 :
-                    chart['violin']['layout'] = {'height': 1000,'showlegend': False,'margin':{'l':300,},'yaxis':{'tickfont':10},'hovermode': 'closest'}
-                else :
-                    chart['violin']['layout'] = {'height': 600,'showlegend': False,"title":'','margin':{'l':300,},'yaxis':{'tickfont':10},'hovermode': 'closest'}
-                chart['violin']['gene'] = gene_name
-                chart['violmsg'] = ""
-                chart['violin']['study'] = stud
-
-                for cond in uniq_groups :
-                    if len(val_gene) != 0 :
-                        val = val_gene[np.where(groups == cond)[0]]
-                    elif len(val_gene_ensembl) != 0 :
-                        val = val_gene_ensembl[np.where(groups == cond)[0]]
+                    for cond in uniq_groups :
+                        val =""
+                        if len(val_gene) != 0 :
+                            val = val_gene[np.where(groups == cond)[0]]
+                        elif len(val_gene_ensembl) != 0 :
+                            val = val_gene_ensembl[np.where(groups == cond)[0]]
+                        
+                        data_chart = {}
+                        data_chart['x'] = []
+                        #print("!!!!!!!!!!!!!!!!!!")
+                        
+                        q3 = np.percentile(val.astype(np.float), 75) #Q3
                     
-                    data_chart = {}
-                    data_chart['x'] = []
-                    #print("!!!!!!!!!!!!!!!!!!")
-                    #print(val)
-                    
-                    q3 = np.percentile(val.astype(np.float), 75) #Q3
-                  
-                    data_chart['x'].extend(val)
-                    data_chart['name'] = cond
-                    data_chart['hoverinfo'] = "all"
-                    #print(data_chart['x']) 
-                    max_x = max(data_chart['x'])
-                    min_x = min(data_chart['x'])
-                    #print(max_x)
-                    
+                        data_chart['x'].extend(val)
+                        data_chart['name'] = cond
+                        data_chart['hoverinfo'] = "all"
+                        #print(data_chart['x']) 
+                        max_x = max(data_chart['x'])
+                        min_x = min(data_chart['x'])
+                        #print(max_x)
+                        
 
-                    if len( data_chart['x']) > 5 :
-                        if max_x != min_x and q3 > 0 and len( data_chart['x']) > 10:
-                            bw = bw_nrd0(data_chart['x'])
-                            data_chart['type'] = 'violin'
-                            data_chart['points'] = False
-                            data_chart['pointpos'] = 0
-                            data_chart['jitter'] = 0.85
-                            #data_chart['bandwidth'] = bw
-                            data_chart['scalemode'] = "width"
-                            data_chart['spanmode'] = "hard"
-                            data_chart['orientation'] = 'h'
-                            data_chart['box'] = {'visible': True}
-                            data_chart['boxpoints'] = False
+                        if len( data_chart['x']) > 5 :
+                            if max_x != min_x and q3 > 0 and len( data_chart['x']) > 10:
+                                bw = bw_nrd0(data_chart['x'])
+                                data_chart['type'] = 'violin'
+                                data_chart['points'] = False
+                                data_chart['pointpos'] = 0
+                                data_chart['jitter'] = 0.85
+                                #data_chart['bandwidth'] = bw
+                                data_chart['scalemode'] = "width"
+                                data_chart['spanmode'] = "hard"
+                                data_chart['orientation'] = 'h'
+                                data_chart['box'] = {'visible': True}
+                                data_chart['boxpoints'] = False
 
+                            else :
+                                data_chart['type'] = 'box'
+                                data_chart['orientation'] = "h"
+                                data_chart['boxpoints'] = False
+                                data_chart['y'] = [cond] * len(data_chart['x'])
+                                data_chart['boxmean'] = True
                         else :
                             data_chart['type'] = 'box'
                             data_chart['orientation'] = "h"
                             data_chart['boxpoints'] = False
                             data_chart['y'] = [cond] * len(data_chart['x'])
                             data_chart['boxmean'] = True
-                    else :
-                        data_chart['type'] = 'box'
-                        data_chart['orientation'] = "h"
-                        data_chart['boxpoints'] = False
-                        data_chart['y'] = [cond] * len(data_chart['x'])
-                        data_chart['boxmean'] = True
-                        chart['violmsg'] = ""
+                            chart['violmsg'] = ""
 
-                    chart['violin']['data'].append(data_chart)
-                result['charts'].append(chart)
+                        chart['violin']['data'].append(data_chart)
+                    result['charts'].append(chart)
         
         # If no gene selected for the study
         if stud not in studies:
